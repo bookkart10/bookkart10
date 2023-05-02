@@ -1,0 +1,162 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  user_id       String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  username      String     @unique
+  mail_id       String     @unique
+  ph_no         String
+  address       address    @relation(fields: [address_id], references: [address_id])
+  address_id    String     @db.Uuid
+  password      String
+  profile_image String
+  readlist      readlist[]
+  rating        rating[]
+}
+
+model books {
+  book_id      String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  book_name    String
+  book_type    book_type     @default(NEW)
+  price        price_details @relation(fields: [price_id], references: [price_id])
+  price_id     String        @db.Uuid
+  availabe_for availabe_for  @default(SELL)
+  category     String
+  publisher    String
+  author_name  String
+  description  String
+  image        String
+  ratings      String
+  language     String
+  rating       rating[]
+  readlist     readlist[]
+}
+
+enum book_type {
+  OLD
+  NEW
+}
+
+enum availabe_for {
+  SELL
+  RENT
+}
+
+model category {
+  category_id   String     @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  category_name String     @unique
+  related_to    related_to
+}
+
+enum related_to {
+  FRICTION
+  NON_FRICTION
+}
+
+model price_details {
+  price_id      String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  selling_price Int
+  actual_price  Int
+  discount      Int
+  Book          books[]
+}
+
+model events {
+  event_id             String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                 String
+  duration             DateTime
+  organiser_details    events_org_details @relation(fields: [organiser_details_id], references: [organiser_details_id])
+  organiser_details_id String             @db.Uuid
+  location             location           @relation(fields: [location_id], references: [loc_id])
+  location_id          String             @db.Uuid
+}
+
+model events_org_details {
+  organiser_details_id String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                 String
+  ph_no                String
+  mail_id              String   @unique
+  events               events[]
+}
+
+model location {
+  loc_id      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  loc_address String
+  city        DateTime
+  state       String
+  events      events[]
+  country     String
+  image       String
+}
+
+model readlist {
+  id          String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  book        books  @relation(fields: [book_id], references: [book_id])
+  book_id     String @db.Uuid
+  book_name   String
+  description String
+  user        user?  @relation(fields: [user_id], references: [user_id])
+  user_id     String @db.Uuid
+}
+
+model address {
+  address_id      String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  pincode         Int
+  area_and_street String
+  city_or_town    String
+  state           String
+  landmark        String
+  user            user[]
+  order           order[]
+}
+
+model payment {
+  payment_id   String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  payment_type payment_type
+  payment_date DateTime
+  price        Int
+  order        order[]
+}
+enum payment_type {
+  CASH
+  UPI
+  NET_BANKING
+  CREDIT_OR_DEBIT_CARD
+}
+
+
+model order {
+  order_id   String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  status     status   @default(PENDING)
+  order_date DateTime
+  address    address  @relation(fields: [address_id], references: [address_id])
+  address_id String   @db.Uuid
+  payment    payment  @relation(fields: [payment_id], references: [payment_id])
+  payment_id String   @db.Uuid
+}
+
+enum status {
+  PENDING
+  DISPATCHED
+  READY_FOR_DELIVERY
+  DELIVERED
+}
+
+model rating {
+  rating_id    String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  rating_value Int
+  book_name    books  @relation(fields: [book_id], references: [book_id])
+  book_id      String @db.Uuid
+  user         user   @relation(fields: [user_id], references: [user_id])
+  user_id      String @db.Uuid
+}
