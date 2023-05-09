@@ -24,21 +24,21 @@ model user {
 }
 
 model books {
-  book_id      String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  book_name    String
-  book_type    book_type     @default(NEW)
-  price        price_details @relation(fields: [price_id], references: [price_id])
-  price_id     String        @db.Uuid
-  availabe_for availabe_for  @default(SELL)
-  category     String
-  publisher    String
-  author_name  String
-  description  String
-  image        String
-  ratings      String
-  language     String
-  rating       rating[]
-  readlist     readlist[]
+  book_id       String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  book_name     String
+  book_type     book_type
+  price         price_details @relation(fields: [price_id], references: [price_id])
+  price_id      String        @db.Uuid
+  available_for available_for
+  categories    category[]
+  publisher     String
+  author_name   String
+  description   String
+  image         String
+  ratings       String
+  language      String
+  rating        rating[]
+  readlist      readlist[]
 }
 
 enum book_type {
@@ -46,14 +46,16 @@ enum book_type {
   NEW
 }
 
-enum availabe_for {
+enum available_for {
   SELL
   RENT
 }
 
 model category {
-  category_id   String     @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  category_name String     @unique
+  category_id   String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  books         books      @relation(fields: [book_id], references: [book_id])
+  book_id       String     @db.Uuid
+  category_name String
   related_to    related_to
 }
 
@@ -91,7 +93,7 @@ model events_org_details {
 model location {
   loc_id      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   loc_address String
-  city        DateTime
+  city        String
   state       String
   events      events[]
   country     String
@@ -121,12 +123,13 @@ model address {
 }
 
 model payment {
-  payment_id   String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  payment_id   String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   payment_type payment_type
   payment_date DateTime
   price        Int
   order        order[]
 }
+
 enum payment_type {
   CASH
   UPI
@@ -134,10 +137,9 @@ enum payment_type {
   CREDIT_OR_DEBIT_CARD
 }
 
-
 model order {
   order_id   String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  status     status   @default(PENDING)
+  status     status
   order_date DateTime
   address    address  @relation(fields: [address_id], references: [address_id])
   address_id String   @db.Uuid
