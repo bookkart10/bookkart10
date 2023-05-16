@@ -1,44 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Button from '../components/Button';
-import {AiOutlineLogin} from "react-icons/ai"
+import Button1 from '../components/Button1';
 
-const meta: Meta<typeof Button> = {
-  title: 'examples/Button',
-  component: Button,
+const meta: Meta<typeof Button1> = {
+  title: 'examples/Button1',
+  component: Button1,
 };
 
-//exporting meta of button story
 export default meta;
 
-type Story = StoryObj<typeof Button>;
+type Story = StoryObj<typeof Button1>;
 
-//exporting primary varient of button
-export const Primary: Story = {
-  args:{
-    intent:"primary",
-    fullwidth:true,
-    children:"Primary Label",
-
-  },
-  argTypes:{
-    fullwidth:{
-      type:"boolean",
-      defaultValue:false
-    }
-  }
-}
-
-export const Disabled: Story = {
-  args:{
-    intent:"disabled",
-    fullwidth:true,
-    children:"Disabled Label",
-
-  },
-  argTypes:{
-    fullwidth:{
-      type:"boolean",
-      defaultValue:false
-    }
-  }
-}
+export const Primary: Story = {}
