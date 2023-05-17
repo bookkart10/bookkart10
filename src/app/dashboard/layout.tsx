@@ -1,20 +1,22 @@
-import { Yatra_One } from "next/font/google";
+import { Hind } from "next/font/google";
 import Link from "next/link";
 
 interface props {
   children: React.ReactNode;
 }
 
-const YatriFont = Yatra_One({ weight: "400", subsets: ["devanagari"] });
+const HindFont = Hind({ weight: "400", subsets: ["devanagari"] });
 
 export default function RootLayout({ children }: props) {
   return (
     <div className="h-screen w-screen overflow-hidden">
       <header
-        style={YatriFont.style}
-        className="h-14 border-b border-gray-600 flex items-center px-5 text-xl font-mono font-bold"
-      >
-        i-Dashboard
+        style={HindFont.style}
+        className="h-14 border-b border-gray-600 flex items-center px-5 text-xl font-mono font-bold">
+        Home
+        Events
+        Book Store
+        
       </header>
       <div className="w-full h-full flex">
         <nav className="h-full w-[180px] border-r border-gray-600 p-5">
