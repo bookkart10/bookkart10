@@ -1,20 +1,12 @@
 import React from "react";
-
-type Props = {
-  onChange: (str: string) => void;
-  placeholder: string;
-  name: string;
-  value?: string;
-};
-function Input({ onChange, name, placeholder, value = "" }: Props) {
+export default function Textbox({children}:{children:string}) {
   return (
-    <input className="font-black border-slate-950"
-      onChange={event => onChange(event.target.value)}
-      name={name}
-      placeholder={placeholder}
-      value={value}
-    />
+    <div>
+        <a className="group text-[#424242]">
+  <span className="box-border h-8 md:h-full border-2 p-0.5 border-gray-700">
+    {children} Text Box
+  </span>
+</a>
+    </div>
   );
 }
-
-export default Input;
