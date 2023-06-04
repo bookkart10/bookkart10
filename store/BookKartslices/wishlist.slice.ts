@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { SupaClient } from "../utils/supabase";
+import { SupaClient } from "../../utils/supabase";
 
 export const fetchIntialwishlist = createAsyncThunk<
   any,
@@ -13,7 +13,7 @@ export const fetchIntialwishlist = createAsyncThunk<
   "/wishlist/fetchIntialwishlist",
   async (_payload, { fulfillWithValue, rejectWithValue }) => {
     try {
-      const response = await SupaClient.from("wishlist")
+      const response = await SupaClient.from("book")
         .select("*,book(bookname)")
         .limit(10).order("created_at",{
           ascending:false
@@ -43,10 +43,9 @@ export const postwishlist = createAsyncThunk<
     try {
       const response = await SupaClient.from("wishlist")
         .insert({
-          content: payload.content,
-          usersId: payload.id,
+          bookId: payload.id,
         })
-        .select("*,users(username)")
+        .select("*,books(bookname)")
         .single();
       const data = response.data;
       dispatch(fetchIntialwishlist());

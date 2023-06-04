@@ -34,40 +34,297 @@ export interface Database {
   }
   public: {
     Tables: {
-      comments: {
+      address: {
         Row: {
-          content: string
-          created_at: string
-          id: string
-          usersId: string | null
+          address_id: string
+          area_and_street: string
+          city_or_town: string
+          landmark: string
+          pincode: number
+          state: string
         }
         Insert: {
-          content: string
-          created_at?: string
-          id?: string
-          usersId?: string | null
+          address_id?: string
+          area_and_street: string
+          city_or_town: string
+          landmark: string
+          pincode: number
+          state: string
         }
         Update: {
-          content?: string
-          created_at?: string
-          id?: string
-          usersId?: string | null
+          address_id?: string
+          area_and_street?: string
+          city_or_town?: string
+          landmark?: string
+          pincode?: number
+          state?: string
         }
       }
-      users: {
+      books: {
         Row: {
-          created_at: string
+          author_name: string
+          available_for: Database["public"]["Enums"]["available_for"]
+          book_id: string
+          book_name: string
+          book_type: Database["public"]["Enums"]["book_type"]
+          description: string
+          image: string
+          language: string
+          price_id: string
+          publisher: string
+          ratings: string
+        }
+        Insert: {
+          author_name: string
+          available_for: Database["public"]["Enums"]["available_for"]
+          book_id?: string
+          book_name: string
+          book_type: Database["public"]["Enums"]["book_type"]
+          description: string
+          image: string
+          language: string
+          price_id: string
+          publisher: string
+          ratings: string
+        }
+        Update: {
+          author_name?: string
+          available_for?: Database["public"]["Enums"]["available_for"]
+          book_id?: string
+          book_name?: string
+          book_type?: Database["public"]["Enums"]["book_type"]
+          description?: string
+          image?: string
+          language?: string
+          price_id?: string
+          publisher?: string
+          ratings?: string
+        }
+      }
+      category: {
+        Row: {
+          book_id: string
+          category_id: string
+          category_name: string
+          related_to: Database["public"]["Enums"]["related_to"]
+        }
+        Insert: {
+          book_id: string
+          category_id?: string
+          category_name: string
+          related_to: Database["public"]["Enums"]["related_to"]
+        }
+        Update: {
+          book_id?: string
+          category_id?: string
+          category_name?: string
+          related_to?: Database["public"]["Enums"]["related_to"]
+        }
+      }
+      events: {
+        Row: {
+          duration: string
+          event_id: string
+          location_id: string
+          name: string
+          organiser_details_id: string
+        }
+        Insert: {
+          duration: string
+          event_id?: string
+          location_id: string
+          name: string
+          organiser_details_id: string
+        }
+        Update: {
+          duration?: string
+          event_id?: string
+          location_id?: string
+          name?: string
+          organiser_details_id?: string
+        }
+      }
+      events_org_details: {
+        Row: {
+          mail_id: string
+          name: string
+          organiser_details_id: string
+          ph_no: string
+        }
+        Insert: {
+          mail_id: string
+          name: string
+          organiser_details_id?: string
+          ph_no: string
+        }
+        Update: {
+          mail_id?: string
+          name?: string
+          organiser_details_id?: string
+          ph_no?: string
+        }
+      }
+      location: {
+        Row: {
+          city: string
+          country: string
+          image: string
+          loc_address: string
+          loc_id: string
+          state: string
+        }
+        Insert: {
+          city: string
+          country: string
+          image: string
+          loc_address: string
+          loc_id?: string
+          state: string
+        }
+        Update: {
+          city?: string
+          country?: string
+          image?: string
+          loc_address?: string
+          loc_id?: string
+          state?: string
+        }
+      }
+      order: {
+        Row: {
+          address_id: string
+          order_date: string
+          order_id: string
+          payment_id: string
+          status: Database["public"]["Enums"]["status"]
+        }
+        Insert: {
+          address_id: string
+          order_date: string
+          order_id?: string
+          payment_id: string
+          status: Database["public"]["Enums"]["status"]
+        }
+        Update: {
+          address_id?: string
+          order_date?: string
+          order_id?: string
+          payment_id?: string
+          status?: Database["public"]["Enums"]["status"]
+        }
+      }
+      payment: {
+        Row: {
+          payment_date: string
+          payment_id: string
+          payment_type: Database["public"]["Enums"]["payment_type"]
+          price: number
+        }
+        Insert: {
+          payment_date: string
+          payment_id?: string
+          payment_type: Database["public"]["Enums"]["payment_type"]
+          price: number
+        }
+        Update: {
+          payment_date?: string
+          payment_id?: string
+          payment_type?: Database["public"]["Enums"]["payment_type"]
+          price?: number
+        }
+      }
+      price_details: {
+        Row: {
+          actual_price: number
+          discount: number
+          price_id: string
+          selling_price: number
+        }
+        Insert: {
+          actual_price: number
+          discount: number
+          price_id?: string
+          selling_price: number
+        }
+        Update: {
+          actual_price?: number
+          discount?: number
+          price_id?: string
+          selling_price?: number
+        }
+      }
+      rating: {
+        Row: {
+          book_id: string
+          rating_id: string
+          rating_value: number
+          user_id: string
+        }
+        Insert: {
+          book_id: string
+          rating_id?: string
+          rating_value: number
+          user_id: string
+        }
+        Update: {
+          book_id?: string
+          rating_id?: string
+          rating_value?: number
+          user_id?: string
+        }
+      }
+      readlist: {
+        Row: {
+          book_id: string
+          book_name: string
+          description: string
           id: string
+          name: string
+          user_id: string
+        }
+        Insert: {
+          book_id: string
+          book_name: string
+          description: string
+          id?: string
+          name: string
+          user_id: string
+        }
+        Update: {
+          book_id?: string
+          book_name?: string
+          description?: string
+          id?: string
+          name?: string
+          user_id?: string
+        }
+      }
+      user: {
+        Row: {
+          address_id: string
+          mail_id: string
+          password: string
+          ph_no: string
+          profile_image: string
+          user_id: string
           username: string
         }
         Insert: {
-          created_at?: string
-          id?: string
+          address_id: string
+          mail_id: string
+          password: string
+          ph_no: string
+          profile_image: string
+          user_id?: string
           username: string
         }
         Update: {
-          created_at?: string
-          id?: string
+          address_id?: string
+          mail_id?: string
+          password?: string
+          ph_no?: string
+          profile_image?: string
+          user_id?: string
           username?: string
         }
       }
@@ -79,7 +336,11 @@ export interface Database {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      available_for: "SELL" | "RENT"
+      book_type: "OLD" | "NEW"
+      payment_type: "CASH" | "UPI" | "NET_BANKING" | "CREDIT_OR_DEBIT_CARD"
+      related_to: "FRICTION" | "NON_FRICTION"
+      status: "PENDING" | "DISPATCHED" | "READY_FOR_DELIVERY" | "DELIVERED"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -248,3 +509,4 @@ export interface Database {
     }
   }
 }
+
