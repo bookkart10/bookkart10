@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { SupaClient } from "../utils/supabase";
 
-export const bookfairThunk = createAsyncThunk<
+export const fetchIntialbookavail = createAsyncThunk<
   any,
   void,
   {
@@ -10,11 +10,14 @@ export const bookfairThunk = createAsyncThunk<
     };
   }
 >(
-  "/bookfair/fetchIntialbookfair",
+  "/bookavail/fetchIntialbookavail",
   async (_payload, { fulfillWithValue, rejectWithValue }) => {
     try {
-      const response = await SupaClient.from("event")
-        .select("*");
+      const response = await SupaClient.from("books")
+        .select("*")
+        /*.limit(10).order("created_at",{
+          ascending:false
+        });*/
       const data = response.data;
       console.log(data)
       return fulfillWithValue(data);
@@ -23,22 +26,6 @@ export const bookfairThunk = createAsyncThunk<
     }
   }
 );
-
-export const postbookfair = createAsyncThunk<
-  any,
-  {
-    event_id : string;
-    name: string;
-    organiser_deatils: string;
-    organiser_deatils_id: string;
-    location_id: string;
-  },
-  {
-    rejectValue: {
-      msg: string;
-    };
-  }
->
 
 interface InitialStateProps {
   isLoading: boolean;
@@ -54,21 +41,21 @@ const initialState: InitialStateProps = {
   isPosting: false,
 };
 
-export const bookfairSlice = createSlice({
-  name: "bookfair",
+export const bookavailSlice = createSlice({
+  name: "bookavail",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(bookfairThunk.fulfilled, (state, { payload }) => {
+    builder.addCase(fetchIntialbookavail.fulfilled, (state, { payload }) => {
       state.data = payload;
       state.isLoading = false;
       state.error = null;
     });
-    builder.addCase(bookfairThunk.pending, (state) => {
+    builder.addCase(fetchIntialbookavail.pending, (state) => {
       state.isLoading = true;
       state.error = null;
     });
-    builder.addCase(bookfairThunk.rejected, (state, { payload }) => {
+    builder.addCase(fetchIntialbookavail.rejected, (state, { payload }) => {
       state.isLoading = false;
       state.error = payload?.msg;
     });

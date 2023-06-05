@@ -1,7 +1,7 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+/*import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { SupaClient } from "../utils/supabase";
 
-export const bookfairThunk = createAsyncThunk<
+export const historyThunk = createAsyncThunk<
   any,
   void,
   {
@@ -10,10 +10,24 @@ export const bookfairThunk = createAsyncThunk<
     };
   }
 >(
-  "/bookfair/fetchIntialbookfair",
+  "/history/fetchIntialhistory",
   async (_payload, { fulfillWithValue, rejectWithValue }) => {
     try {
-      const response = await SupaClient.from("event")
+      const response = await SupaClient.from("")
+        .select("*");
+      const data = response.data;
+      console.log(data)
+      return fulfillWithValue(data);
+    } catch (e) {
+      return rejectWithValue({ msg: "Something went wrong !" });
+    }
+  }
+);
+>(
+  "/history/fetchpurchasehistory",
+  async (_payload, { fulfillWithValue, rejectWithValue }) => {
+    try {
+      const response = await SupaClient.from("")
         .select("*");
       const data = response.data;
       console.log(data)
@@ -24,21 +38,7 @@ export const bookfairThunk = createAsyncThunk<
   }
 );
 
-export const postbookfair = createAsyncThunk<
-  any,
-  {
-    event_id : string;
-    name: string;
-    organiser_deatils: string;
-    organiser_deatils_id: string;
-    location_id: string;
-  },
-  {
-    rejectValue: {
-      msg: string;
-    };
-  }
->
+
 
 interface InitialStateProps {
   isLoading: boolean;
@@ -54,23 +54,23 @@ const initialState: InitialStateProps = {
   isPosting: false,
 };
 
-export const bookfairSlice = createSlice({
-  name: "bookfair",
+export const historySlice = createSlice({
+  name: "history",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(bookfairThunk.fulfilled, (state, { payload }) => {
+    builder.addCase(historyThunk.fulfilled, (state, { payload }) => {
       state.data = payload;
       state.isLoading = false;
       state.error = null;
     });
-    builder.addCase(bookfairThunk.pending, (state) => {
+    builder.addCase(historyThunk.pending, (state) => {
       state.isLoading = true;
       state.error = null;
     });
-    builder.addCase(bookfairThunk.rejected, (state, { payload }) => {
+    builder.addCase(historyThunk.rejected, (state, { payload }) => {
       state.isLoading = false;
       state.error = payload?.msg;
     });
   },
-});
+});*/
