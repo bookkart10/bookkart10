@@ -15,20 +15,19 @@ model user {
   username      String     @unique
   mail_id       String     @unique
   ph_no         String
-  address       address    @relation(fields: [address_id], references: [address_id])
-  address_id    String     @db.Uuid
   password      String
   profile_image String
   readlist      readlist[]
   rating        rating[]
+  buyer         books[]    @relation(name: "buyer")
+  seller        books[]    @relation(name: "seller")
 }
 
 model books {
-  book_id       String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  book_id       String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   book_name     String
   book_type     book_type
-  price         price_details @relation(fields: [price_id], references: [price_id])
-  price_id      String        @db.Uuid
+  price         Int
   available_for available_for
   categories    category[]
   publisher     String
@@ -39,6 +38,12 @@ model books {
   language      String
   rating        rating[]
   readlist      readlist[]
+  book_history  book_history[]
+  cart          cart[]
+  seller        user?          @relation(name: "seller", fields: [seller_id], references: [user_id])
+  seller_id     String?        @db.Uuid
+  buyer         user?          @relation(name: "buyer", fields: [buyer_id], references: [user_id])
+  buyer_id      String?        @db.Uuid
 }
 
 enum book_type {
@@ -47,7 +52,7 @@ enum book_type {
 }
 
 enum available_for {
-  SELL
+  SALE
   RENT
 }
 
@@ -60,16 +65,8 @@ model category {
 }
 
 enum related_to {
-  FRICTION
-  NON_FRICTION
-}
-
-model price_details {
-  price_id      String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  selling_price Int
-  actual_price  Int
-  discount      Int
-  Book          books[]
+  FICTION
+  NON_FICTION
 }
 
 model events {
@@ -111,54 +108,34 @@ model readlist {
   user_id     String @db.Uuid
 }
 
-model address {
-  address_id      String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  pincode         Int
-  area_and_street String
-  city_or_town    String
-  state           String
-  landmark        String
-  user            user[]
-  order           order[]
-}
-
-model payment {
-  payment_id   String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  payment_type payment_type
-  payment_date DateTime
-  price        Int
-  order        order[]
-}
-
-enum payment_type {
-  CASH
-  UPI
-  NET_BANKING
-  CREDIT_OR_DEBIT_CARD
-}
-
 model order {
   order_id   String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  status     status
   order_date DateTime
-  address    address  @relation(fields: [address_id], references: [address_id])
-  address_id String   @db.Uuid
-  payment    payment  @relation(fields: [payment_id], references: [payment_id])
-  payment_id String   @db.Uuid
-}
-
-enum status {
-  PENDING
-  DISPATCHED
-  READY_FOR_DELIVERY
-  DELIVERED
 }
 
 model rating {
-  rating_id    String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  rating_id    String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   rating_value Int
-  book_name    books  @relation(fields: [book_id], references: [book_id])
-  book_id      String @db.Uuid
-  user         user   @relation(fields: [user_id], references: [user_id])
-  user_id      String @db.Uuid
+  description  String?
+  book_name    books   @relation(fields: [book_id], references: [book_id])
+  book_id      String  @db.Uuid
+  user         user    @relation(fields: [user_id], references: [user_id])
+  user_id      String  @db.Uuid
+}
+
+model book_history {
+  id            String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  book_name     books         @relation(fields: [book_id], references: [book_id])
+  book_id       String        @db.Uuid
+  available_for available_for
+  date          DateTime
+  price         Int
+  seller_id     String        @db.Uuid
+  buyer_id      String        @db.Uuid
+}
+
+model cart {
+  id       String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  books    books?  @relation(fields: [books_id], references: [book_id])
+  books_id String? @db.Uuid
 }

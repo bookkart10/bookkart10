@@ -1,7 +1,7 @@
-/*import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { SupaClient } from "../utils/supabase";
 
-export const historyThunk = createAsyncThunk<
+export const fetchIntialbestsellerbook = createAsyncThunk<
   any,
   void,
   {
@@ -10,11 +10,15 @@ export const historyThunk = createAsyncThunk<
     };
   }
 >(
-  "/history/fetchIntialhistory",
+  "/bestsellerbook/fetchIntialbestsellerbook",
   async (_payload, { fulfillWithValue, rejectWithValue }) => {
     try {
-      const response = await SupaClient.from("")
-        .select("*");
+      const response = await SupaClient.from("ratings")
+        .select("*,rating(ratings_)")
+        .gte('ratings_value','4')
+        /*.limit(10).order("created_at",{
+          ascending:false
+        });*/
       const data = response.data;
       console.log(data)
       return fulfillWithValue(data);
@@ -23,22 +27,6 @@ export const historyThunk = createAsyncThunk<
     }
   }
 );
->(
-  "/history/fetchpurchasehistory",
-  async (_payload, { fulfillWithValue, rejectWithValue }) => {
-    try {
-      const response = await SupaClient.from("")
-        .select("*");
-      const data = response.data;
-      console.log(data)
-      return fulfillWithValue(data);
-    } catch (e) {
-      return rejectWithValue({ msg: "Something went wrong !" });
-    }
-  }
-);
-
-
 
 interface InitialStateProps {
   isLoading: boolean;
@@ -54,23 +42,23 @@ const initialState: InitialStateProps = {
   isPosting: false,
 };
 
-export const historySlice = createSlice({
-  name: "history",
+export const bestsellerbookSlice = createSlice({
+  name: "bestsellerbook",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(historyThunk.fulfilled, (state, { payload }) => {
+    builder.addCase(fetchIntialbestsellerbook.fulfilled, (state, { payload }) => {
       state.data = payload;
       state.isLoading = false;
       state.error = null;
     });
-    builder.addCase(historyThunk.pending, (state) => {
+    builder.addCase(fetchIntialbestsellerbook.pending, (state) => {
       state.isLoading = true;
       state.error = null;
     });
-    builder.addCase(historyThunk.rejected, (state, { payload }) => {
+    builder.addCase(fetchIntialbestsellerbook.rejected, (state, { payload }) => {
       state.isLoading = false;
       state.error = payload?.msg;
     });
   },
-});*/
+});

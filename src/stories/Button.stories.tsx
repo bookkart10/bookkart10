@@ -1,11 +1,8 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import Button from "../components/Button";
-import {
-  AiOutlineFilter,
-} from "react-icons/ai";
+import type { Meta, StoryObj } from '@storybook/react';
+import Button from '../components/Button';
 
 const meta: Meta<typeof Button> = {
-  title: "ui/Button",
+  title: 'Button',
   component: Button,
 };
 
@@ -16,27 +13,42 @@ type Story = StoryObj<typeof Button>;
 
 //exporting primary varient of button
 export const Primary: Story = {
-  args: {
-    intent: "primary",
-    children: "Login",
+  args:{
+    intent:"primary",
+    fullwidth:true,
+    children:"Primary Label",
   },
-  argTypes: {},
-};
+  argTypes:{
+    fullwidth:{
+      type:"boolean",
+      defaultValue:false
+    }
+  }
+}
+export const secondary: Story = {
+  args:{
+    intent:"secondary",
+    fullwidth:true,
+    children:"Secondary Label",
+  },
+  argTypes:{
+    fullwidth:{
+      type:"boolean",
+      defaultValue:false
+    }
+  }
+}
 
-export const Secondary: Story = {
-  args: {
-    intent: "secondary",
-    children: "Login",
+export const Disabled: Story = {
+  args:{
+    intent:"disabled",
+    fullwidth:true,
+    children:"Disabled Label",
   },
-  argTypes: {},
-};
-
-export const ButtonWithIcon: Story = {
-  args: {
-    intent: "secondary",
-    children: "Login",
-    variant:"outline_secondary",
-    leftIcon:<AiOutlineFilter  className="text-2xl"/>
+  argTypes:{
+    fullwidth:{
+      type:"boolean",
+      defaultValue:false
+    }
   },
-  argTypes: {},
-};
+}

@@ -72,7 +72,6 @@ const initialState: InitialStateProps = {
   error: null,
   isPosting: false,
 };
-
 export const readlistSlice = createSlice({
   name: "readlist",
   initialState,

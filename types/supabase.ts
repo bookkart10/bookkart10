@@ -34,30 +34,33 @@ export interface Database {
   }
   public: {
     Tables: {
-      address: {
+      book_history: {
         Row: {
-          address_id: string
-          area_and_street: string
-          city_or_town: string
-          landmark: string
-          pincode: number
-          state: string
+          available_for: Database["public"]["Enums"]["available_for"]
+          book_id: string
+          buyer_id: string
+          date: string
+          id: string
+          price: number
+          seller_id: string
         }
         Insert: {
-          address_id?: string
-          area_and_street: string
-          city_or_town: string
-          landmark: string
-          pincode: number
-          state: string
+          available_for: Database["public"]["Enums"]["available_for"]
+          book_id: string
+          buyer_id: string
+          date: string
+          id?: string
+          price: number
+          seller_id: string
         }
         Update: {
-          address_id?: string
-          area_and_street?: string
-          city_or_town?: string
-          landmark?: string
-          pincode?: number
-          state?: string
+          available_for?: Database["public"]["Enums"]["available_for"]
+          book_id?: string
+          buyer_id?: string
+          date?: string
+          id?: string
+          price?: number
+          seller_id?: string
         }
       }
       books: {
@@ -70,7 +73,7 @@ export interface Database {
           description: string
           image: string
           language: string
-          price_id: string
+          price: number
           publisher: string
           ratings: string
         }
@@ -83,7 +86,7 @@ export interface Database {
           description: string
           image: string
           language: string
-          price_id: string
+          price: number
           publisher: string
           ratings: string
         }
@@ -96,9 +99,23 @@ export interface Database {
           description?: string
           image?: string
           language?: string
-          price_id?: string
+          price?: number
           publisher?: string
           ratings?: string
+        }
+      }
+      cart: {
+        Row: {
+          books_id: string | null
+          id: string
+        }
+        Insert: {
+          books_id?: string | null
+          id?: string
+        }
+        Update: {
+          books_id?: string | null
+          id?: string
         }
       }
       category: {
@@ -192,82 +209,36 @@ export interface Database {
       }
       order: {
         Row: {
-          address_id: string
           order_date: string
           order_id: string
-          payment_id: string
-          status: Database["public"]["Enums"]["status"]
         }
         Insert: {
-          address_id: string
           order_date: string
           order_id?: string
-          payment_id: string
-          status: Database["public"]["Enums"]["status"]
         }
         Update: {
-          address_id?: string
           order_date?: string
           order_id?: string
-          payment_id?: string
-          status?: Database["public"]["Enums"]["status"]
-        }
-      }
-      payment: {
-        Row: {
-          payment_date: string
-          payment_id: string
-          payment_type: Database["public"]["Enums"]["payment_type"]
-          price: number
-        }
-        Insert: {
-          payment_date: string
-          payment_id?: string
-          payment_type: Database["public"]["Enums"]["payment_type"]
-          price: number
-        }
-        Update: {
-          payment_date?: string
-          payment_id?: string
-          payment_type?: Database["public"]["Enums"]["payment_type"]
-          price?: number
-        }
-      }
-      price_details: {
-        Row: {
-          actual_price: number
-          discount: number
-          price_id: string
-          selling_price: number
-        }
-        Insert: {
-          actual_price: number
-          discount: number
-          price_id?: string
-          selling_price: number
-        }
-        Update: {
-          actual_price?: number
-          discount?: number
-          price_id?: string
-          selling_price?: number
         }
       }
       rating: {
         Row: {
           book_id: string
+          description: string | null
           rating_id: string
           rating_value: number
           user_id: string
         }
         Insert: {
           book_id: string
+          description?: string | null
           rating_id?: string
           rating_value: number
           user_id: string
         }
         Update: {
           book_id?: string
+          description?: string | null
           rating_id?: string
           rating_value?: number
           user_id?: string
@@ -301,7 +272,6 @@ export interface Database {
       }
       user: {
         Row: {
-          address_id: string
           mail_id: string
           password: string
           ph_no: string
@@ -310,7 +280,6 @@ export interface Database {
           username: string
         }
         Insert: {
-          address_id: string
           mail_id: string
           password: string
           ph_no: string
@@ -319,7 +288,6 @@ export interface Database {
           username: string
         }
         Update: {
-          address_id?: string
           mail_id?: string
           password?: string
           ph_no?: string
@@ -336,11 +304,9 @@ export interface Database {
       [_ in never]: never
     }
     Enums: {
-      available_for: "SELL" | "RENT"
+      available_for: "SALE" | "RENT"
       book_type: "OLD" | "NEW"
-      payment_type: "CASH" | "UPI" | "NET_BANKING" | "CREDIT_OR_DEBIT_CARD"
-      related_to: "FRICTION" | "NON_FRICTION"
-      status: "PENDING" | "DISPATCHED" | "READY_FOR_DELIVERY" | "DELIVERED"
+      related_to: "FICTION" | "NON_FICTION"
     }
     CompositeTypes: {
       [_ in never]: never

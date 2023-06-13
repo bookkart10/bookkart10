@@ -4,6 +4,8 @@ import { useAppDispatch } from "../../hooks";
 import "../styles/globals.css"
 import { fetchIntialreadlist } from "../../store/readlist.slice";
 import Providers from "./providers";
+import Navbar from "@/components/Navbar";
+
 
 interface props{
     children:React.ReactNode
@@ -14,7 +16,9 @@ export default function RootLayout({ children }:props) {
   
     return (
       <html lang="en">
-        <body><Providers>{children}</Providers></body>
+        <body className="h-[100vh] w-[100vw] overflow-hidden"><Providers> <Navbar/>{children}</Providers>
+       
+        </body>
       </html>
     );
   }

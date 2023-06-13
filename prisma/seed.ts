@@ -4,18 +4,19 @@ import { faker } from "@faker-js/faker";
 const Prisma = new PrismaClient();
 
 async function main() {
+  await Prisma.purchase.deleteMany();
   await Prisma.rating.deleteMany();
   await Prisma.order.deleteMany();
-  await Prisma.payment.deleteMany();
+ // await Prisma.payment.deleteMany();
   await Prisma.readlist.deleteMany();
   await Prisma.events.deleteMany();
   await Prisma.location.deleteMany();
   await Prisma.events_org_details.deleteMany();
   await Prisma.category.deleteMany();
   await Prisma.books.deleteMany();
-  await Prisma.price_details.deleteMany();
+  //await Prisma.price_details.deleteMany();
   await Prisma.user.deleteMany();
-  await Prisma.address.deleteMany();
+  //await Prisma.address.deleteMany();
 
   for (let i = 0; i < 6; i++) {
     await Prisma.address.create({
@@ -48,20 +49,15 @@ async function main() {
   for (let i = 0; i < 6; i++) {
     const booktypes = ["OLD", "NEW"];
     const randomIndex = Math.floor(Math.random() * booktypes.length);
-    const available_for = ["SELL", "RENT"];
+    const available_for = ["SALE", "RENT"];
     const randomIndex1 = Math.floor(Math.random() * available_for.length);
     await Prisma.books.create({
       data: {
         book_name: faker.lorem.text(),
-        //@ts-ignore
+         //@ts-ignore
         book_type: booktypes[randomIndex],
-        price: {
-          create: {
-            selling_price: parseInt(faker.commerce.price(100, 2000)),
-            actual_price: parseInt(faker.commerce.price(50, 1800)),
-            discount: parseInt(faker.commerce.price(0, 80)),
-          },
-        },
+         //@ts-ignore
+        price: parseInt(faker.commerce.price(100, 2000)),  
         //@ts-ignore
         available_for: available_for[randomIndex1],
         publisher: faker.company.name(),
@@ -69,7 +65,7 @@ async function main() {
         description: faker.lorem.paragraph(),
         image: faker.image.image(),
         language: "English",
-        ratings: faker.datatype.number({ min: 1, max: 5 }).toString()
+        ratings: faker.datatype.number({ min: 1, max: 5 }).toString(),
       },
     });
   }
@@ -78,7 +74,7 @@ async function main() {
 
   await Promise.all(
     categories.map(async (books) => {
-      const relatedto = ["FRICTION", "NON_FRICTION"];
+      const relatedto = ["FICTION", "NON_FICTION"];
       const randomIndex3 = Math.floor(Math.random() * relatedto.length);
       await Prisma.category.create({
         data: {
@@ -203,7 +199,7 @@ async function main() {
       });
     })
   );
-}
+  
 main()
   .then(() => console.log("success"))
   .catch((e) => console.log(e))
