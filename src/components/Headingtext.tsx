@@ -1,11 +1,10 @@
 import React from 'react';
 
-export default function Headingtext(){
+export default function Headingtext({children}:{children:string}){
   return (
-    <body>
-    <h1 className="underline decoration-red-400 underline-offset-4 font-semibold" >
-        Text Underline
-    </h1>
-</body>
-  );
-}
+   
+  <span className="underline decoration-red-400 underline-offset-4 font-semibold text-xl">
+    {children}
+  </span>
+  )
+} 

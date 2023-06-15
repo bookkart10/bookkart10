@@ -1,3 +1,4 @@
+"use client"
 import { VariantProps, cva } from "class-variance-authority";
 export type ButtonProps = VariantProps<typeof buttonStyles>;
 
@@ -19,17 +20,21 @@ export const buttonStyles = cva("px-5 py-2  flex items-center justify-center tex
 });
 
 interface ButtonExtendedProps extends ButtonProps {
-  children: string;
+  children: string; 
+  onClick?:()=> void
+  className: string;
 }
 
 export default function Button({
   intent,
   fullwidth,
+  className,
   children,
+  onClick,
   ...props
 }: ButtonExtendedProps) {
   return (
-    <button className={buttonStyles({ intent, fullwidth })} {...props}>
+    <button onClick={()=>onClick && onClick()} className={buttonStyles({ intent, fullwidth })+" "+className} {...props}>
       {children}
     </button>
   );

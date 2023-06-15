@@ -1,20 +1,23 @@
+"use client"
 import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
 
+
 const slides = [
+ 
   {
     id: 1,
-    image: 'https://via.placeholder.com/800x400/1a1a1a/ffffff?text=Slide+1',
+    image: "/banner1.png",
     caption: 'Slide 1',
   },
   {
     id: 2,
-    image: 'https://via.placeholder.com/800x400/2a2a2a/ffffff?text=Slide+2',
+    image: "/banner3.png",
     caption: 'Slide 2',
   },
   {
     id: 3,
-    image: 'https://via.placeholder.com/800x400/3a3a3a/ffffff?text=Slide+3',
+    image: "/banner2.png",
     caption: 'Slide 3',
   },
 ];
@@ -36,9 +39,9 @@ const Slideshow = () => {
   }, [activeSlide]);
 
   return (
-    <div className="relative h-screen">
+    <div className="relative h-72">
       <div className="absolute inset-0 flex items-center justify-center">
-        <img className="w-full h-full object-cover" src={slides[activeSlide - 1].image} alt={slides[activeSlide - 1].caption} />
+        <img className="w-full h-full object-cover" src={slides[activeSlide-1].image} alt={slides[activeSlide-1].caption} />
       </div>
       <div className="absolute inset-x-0 bottom-0 mb-8 flex justify-center">
         {slides.map((slide) => (

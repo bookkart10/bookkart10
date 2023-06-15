@@ -10,17 +10,48 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model account {
+  id                String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId            String  @db.Uuid
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              user    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model session {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sessionToken String   @unique
+  userId       String   @db.Uuid
+  expires      DateTime
+  user         user     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
 model user {
-  user_id       String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  username      String     @unique
-  mail_id       String     @unique
-  ph_no         String
-  password      String
-  profile_image String
-  readlist      readlist[]
-  rating        rating[]
-  buyer         books[]    @relation(name: "buyer")
-  seller        books[]    @relation(name: "seller")
+  id                String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  username          String     @unique
+  mail_id           String     @unique
+  ph_no             String?
+  password          String
+  profile_image     String?
+  readlist          readlist[]
+  buyer             books[]    @relation(name: "buyer")
+  seller            books[]    @relation(name: "seller")
+  account           account[]
+  session           session[]
+  address           address?   @relation(fields: [addressAddress_id], references: [address_id])
+  addressAddress_id String?    @db.Uuid
+
+  @@index([id])
 }
 
 model books {
@@ -34,15 +65,13 @@ model books {
   author_name   String
   description   String
   image         String
-  ratings       String
   language      String
-  rating        rating[]
   readlist      readlist[]
   book_history  book_history[]
   cart          cart[]
-  seller        user?          @relation(name: "seller", fields: [seller_id], references: [user_id])
+  seller        user?          @relation(name: "seller", fields: [seller_id], references: [id])
   seller_id     String?        @db.Uuid
-  buyer         user?          @relation(name: "buyer", fields: [buyer_id], references: [user_id])
+  buyer         user?          @relation(name: "buyer", fields: [buyer_id], references: [id])
   buyer_id      String?        @db.Uuid
 }
 
@@ -104,23 +133,26 @@ model readlist {
   book_id     String @db.Uuid
   book_name   String
   description String
-  user        user?  @relation(fields: [user_id], references: [user_id])
+  user        user?  @relation(fields: [user_id], references: [id])
   user_id     String @db.Uuid
 }
 
-model order {
-  order_id   String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  order_date DateTime
+model address {
+  address_id      String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  pincode         Int
+  area_and_street String
+  city_or_town    String
+  state           String
+  landmark        String
+  user            user[]
+  order           order[]
 }
 
-model rating {
-  rating_id    String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  rating_value Int
-  description  String?
-  book_name    books   @relation(fields: [book_id], references: [book_id])
-  book_id      String  @db.Uuid
-  user         user    @relation(fields: [user_id], references: [user_id])
-  user_id      String  @db.Uuid
+model order {
+  order_id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  order_date        DateTime
+  address           address? @relation(fields: [addressAddress_id], references: [address_id])
+  addressAddress_id String?  @db.Uuid
 }
 
 model book_history {

@@ -1,47 +1,48 @@
+"use client"
 import React from "react";
 import Image from "next/image";
-import Bookkartlogo from "../../public/Images/Bookkartlogo.jpg";
+import Bookkartlogo from "../../public/Bookkartlogo.jpg";
 import { FaFacebook, FaTwitter, FaLinkedin, FaPinterest, FaInstagram } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#424242] text-white">
+    <footer className="bg-[#424242] text-[#C7C7C7]">
       <div className="grid grid-cols-4 h-6/7">
         {/* First column */}
         <div className="col-span-1 py-4 px-4">
-          <Image src={Bookkartlogo} alt="Logo" width={157} height={118} />
+          <Image src={Bookkartlogo} alt="Logo" className="rounded-lg" width={157} height={118} />
           <p style={{ color: "#C7C7C7" }}>
             BookKart is a customer-to-customer platform like Olx for books.
             Our main objective is to bridge the communication gap between book sellers and buyers/renters, reducing the cost of books and sharing knowledge.
           </p>
         </div>
         {/* Second column */}
-        <div className="col-span-1">
+        <div className="col-span-1 border-l border-white-500 p-8">
           <p style={{ color: "#C7C7C7" }}>
             <ul>
-              <li>Company</li><br />
-              <li>About us</li>
-              <li>Contact us</li>
-              <li>Terms and conditions</li>
-              <li>Shipping Policy</li>
-              <li>Privacy Policy</li>
+              <li ><b>Company</b> </li><br />
+              <li className="hover:text-[#FF6D6D] hover:cursor-pointer">About us</li>
+              <li className="hover:text-[#FF6D6D] hover:cursor-pointer"> Contact us</li>
+              <li className="hover:text-[#FF6D6D] hover:cursor-pointer">Terms and conditions</li>
+              <li className="hover:text-[#FF6D6D] hover:cursor-pointer">Shipping Policy</li>
+              <li className="hover:text-[#FF6D6D] hover:cursor-pointer">Privacy Policy</li>
             </ul>
           </p>
         </div>
         {/* Third column */}
-        <div className="col-span-1">
+        <div className="col-span-1 border-l border-white-500 p-8">
           <p style={{ color: "#C7C7C7" }}>
             <ul>
-              <li>Quick links</li><br />
-              <li>Home</li>
-              <li>Events</li>
-              <li>Book Store</li>
-              <li>Category</li>
+              <li >Quick links</li><br />
+              <li className="hover:text-[#FF6D6D] hover:cursor-pointer">Home</li>
+              <li className="hover:text-[#FF6D6D]  hover:cursor-pointer">Events</li>
+              <li className="hover:text-[#FF6D6D] hover:cursor-pointer">Book Store</li>
+              <li className="hover:text-[#FF6D6D] hover:cursor-pointer">Category</li>
             </ul>
           </p>
         </div>
         {/* Fourth column */}
-        <div className="col-span-1">
+        <div className="col-span-1 border-l border-white-500 p-8">
           <p>
             <p style={{ color: "#C7C7C7" }}>
               Details<br />
@@ -50,7 +51,7 @@ const Footer = () => {
               <br />
             </p>
             <p style={{ color: "#C7C7C7" }}>
-              Email: customer@bookscape.com<br />
+              Email: customer@bookkart.com<br />
               Phone: +91 86520 50510 (9AM to 6PM)
             </p>
           </p>
@@ -86,4 +87,4 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default Footer;

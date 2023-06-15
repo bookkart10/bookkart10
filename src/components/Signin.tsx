@@ -99,20 +99,7 @@ export default function Signin() {
                   className="block text-sm font-medium leading-6 text-gray-900"
                 ></label>
               </div>
-              <div className="mt-2">
-                <input
-                  id="Confirm password"
-                  placeholder="Confirm password"
-                  name="Confirm password"
-                  type="Confirm password"
-                  autoComplete="current-Confirm password"
-                  required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 
-                  shadow-sm ring-1 ring-inset ring-[#FF6D6D] placeholder:text-[#000000] 
-                  pl-2 placeholder:text-opacity-60 focus:ring-1 focus:ring-inset 
-                  focus:ring-black sm:text-sm sm:leading-6"
-                />
-              </div>
+              
             </div>
 
             <div className="text-sm flex justify-end w-full">
@@ -122,7 +109,7 @@ export default function Signin() {
             </div>
 
             <div>
-              <Button fullwidth intent={"primary"}>
+              <Button className="" fullwidth intent={"primary"}>
                 Continue
               </Button>
             </div>

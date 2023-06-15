@@ -1,12 +1,16 @@
+"use client"
 import Button from "@/components/Button";
 import Image, { StaticImageData } from "next/image";
-import Bookkartlogo from "../../public/Images/Bookkartlogo.jpg";
+import Bookkartlogo from "../../public/Bookkartlogo.jpg";
+import { signIn, useSession } from "next-auth/react";
 
 export default function Login() {
+  const session=useSession()
   return (
     <>
       <div className=" h-fit bg-[#FFF1F1] w-2/6 block justify-center border-2 rounded-xl px-6 py-8 lg:px-8">
         <div className="sm:mx-auto sm:min-w-full sm:max-w-sm ">
+          <pre>{JSON.stringify(session)}</pre>
           <div className="inset-x-28 flex justify-center">
             <Image
               src="/Bookkartlogo.jpg"
@@ -73,12 +77,16 @@ export default function Login() {
               </a>
             </div>
             <div>
-              <Button fullwidth intent={"primary"}>
+              <Button className="" onClick={()=>{
+               signIn("credentials",{
+                userId:"Kyleigh_Tromp43@yahoo.com",password:"password",for:"sign-in"
+               })
+              }} fullwidth intent={"primary"}>
                 LOGIN
               </Button>
             </div>
             <div>
-              <Button fullwidth intent={"secondary"}>
+              <Button className="" fullwidth intent={"secondary"}>
                 Sign up for an account
               </Button>
             </div>
