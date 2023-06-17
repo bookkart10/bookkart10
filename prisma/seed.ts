@@ -1,67 +1,51 @@
-import { PrismaClient, payment_type } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { faker } from "@faker-js/faker";
+import { hash } from "bcrypt";
 
 const Prisma = new PrismaClient();
 
 async function main() {
   await Prisma.rating.deleteMany();
   await Prisma.order.deleteMany();
-  await Prisma.payment.deleteMany();
+  // await Prisma.payment.deleteMany();
   await Prisma.readlist.deleteMany();
   await Prisma.events.deleteMany();
   await Prisma.location.deleteMany();
   await Prisma.events_org_details.deleteMany();
   await Prisma.category.deleteMany();
   await Prisma.books.deleteMany();
-  await Prisma.price_details.deleteMany();
+  //await Prisma.price_details.deleteMany();
   await Prisma.user.deleteMany();
-  await Prisma.address.deleteMany();
+ // await Prisma.address.deleteMany();
+
+  const hashedPassword = await hash("password", 12);
+
+ 
 
   for (let i = 0; i < 6; i++) {
-    await Prisma.address.create({
+    await Prisma.user.create({
       data: {
-        area_and_street: faker.address.streetAddress(),
-        city_or_town: faker.address.city(),
-        landmark: faker.address.street(),
-        pincode: faker.datatype.number(),
-        state: faker.address.state(),
+        username: faker.name.fullName(),
+        mail_id: faker.internet.email(),
+        ph_no: faker.phone.number("+91 ##### #####"),
+        password: hashedPassword,
+        profile_image: faker.image.image(),
       },
     });
   }
 
-  const addresses = await Prisma.address.findMany();
-  await Promise.all(
-    addresses.map(async (address) => {
-      await Prisma.user.create({
-        data: {
-          username: faker.name.fullName(),
-          mail_id: faker.internet.email(),
-          ph_no: faker.phone.number("+91 ##### #####"),
-          address_id: address?.address_id!,
-          password: faker.internet.password(),
-          profile_image: faker.image.image(),
-        },
-      });
-    })
-  );
-
   for (let i = 0; i < 6; i++) {
     const booktypes = ["OLD", "NEW"];
     const randomIndex = Math.floor(Math.random() * booktypes.length);
-    const available_for = ["SELL", "RENT"];
+    const available_for = ["SALE", "RENT"];
     const randomIndex1 = Math.floor(Math.random() * available_for.length);
     await Prisma.books.create({
       data: {
         book_name: faker.lorem.text(),
         //@ts-ignore
         book_type: booktypes[randomIndex],
-        price: {
-          create: {
-            selling_price: parseInt(faker.commerce.price(100, 2000)),
-            actual_price: parseInt(faker.commerce.price(50, 1800)),
-            discount: parseInt(faker.commerce.price(0, 80)),
-          },
-        },
+        //@ts-ignore
+        price: parseInt(faker.commerce.price(100, 2000)),
         //@ts-ignore
         available_for: available_for[randomIndex1],
         publisher: faker.company.name(),
@@ -69,7 +53,7 @@ async function main() {
         description: faker.lorem.paragraph(),
         image: faker.image.image(),
         language: "English",
-        ratings: faker.datatype.number({ min: 1, max: 5 }).toString()
+        ratings: faker.datatype.number({ min: 1, max: 5 }).toString(),
       },
     });
   }
@@ -78,7 +62,7 @@ async function main() {
 
   await Promise.all(
     categories.map(async (books) => {
-      const relatedto = ["FRICTION", "NON_FRICTION"];
+      const relatedto = ["FICTION", "NON_FICTION"];
       const randomIndex3 = Math.floor(Math.random() * relatedto.length);
       await Prisma.category.create({
         data: {
@@ -142,68 +126,42 @@ async function main() {
           book_name: faker.lorem.words(),
           description: faker.lorem.paragraph(),
           //@ts-ignore
-          user_id: user.user_id,
+          user_id: user.id,
         },
       });
     })
   );
 
-  for (let i = 0; i < 6; i++) {
-    const payment_type = ["CASH", "UPI", "NET_BANKING", "CREDIT_OR_DEBIT_CARD"];
-    const randomIndex5 = Math.floor(Math.random() * payment_type.length);
-    await Prisma.payment.create({
-      data: {
-        //@ts-ignore
-        payment_type: payment_type[randomIndex5],
-        payment_date: faker.date.past(),
-        price: faker.datatype.number({ min: 100, max: 2000 }),
-      },
-    });
-  }
-
-  const addressess = await Prisma.address.findMany();
-  const payments = await Prisma.payment.findMany();
-
-  await Promise.all(
-    addressess.map(async (address) => {
-      const statuss = [
-        "PENDING",
-        "DISPATCHED",
-        "READY_FOR_DELIVERY",
-        "DELIVERED",
-      ];
-      const randomIndex6 = Math.floor(Math.random() * statuss.length);
-      const randomIndex7 = Math.floor(Math.random() * payments.length);
-      await Prisma.order.create({
-        data: {
-          //@ts-ignore
-          status: statuss[randomIndex6],
-          order_date: faker.date.recent(),
-          address_id: address?.address_id!,
-          //@ts-ignore
-          payment_id: payments[randomIndex7].payment_id,
-        },
-      });
-    })
-  );
+  await Prisma.order.create({
+    data: {
+      //@ts-ignore
+      status: statuss[randomIndex6],
+      order_date: faker.date.recent(),
+      //@ts-ignore
+      payment_id: payments[randomIndex7].payment_id,
+    },
+  });
 
   const usersss = await Prisma.user.findMany();
-  const bookss = await Prisma.books.findMany();
-  const randomIndex8 = Math.floor(Math.random() * bookss.length);
+const bookss = await Prisma.books.findMany();
+const randomIndex8 = Math.floor(Math.random() * bookss.length);
 
-  await Promise.all(
-    usersss.map(async (user) => {
-      await Prisma.rating.create({
-        data: {
-          rating_value: faker.datatype.number({ min: 1, max: 5 }),
-          //@ts-ignore
-          book_id: bookss[randomIndex8].book_id,
-          user_id: user?.user_id!,
-        },
-      });
-    })
-  );
+await Promise.all(
+  usersss.map(async (user) => {
+    await Prisma.rating.create({
+      data: {
+        rating_value: faker.datatype.number({ min: 1, max: 5 }),
+        //@ts-ignore
+        book_id: bookss[randomIndex8].book_id,
+        user_id: user?.id!,
+      },
+    });
+  })
+);
 }
+
+
+
 main()
   .then(() => console.log("success"))
   .catch((e) => console.log(e))

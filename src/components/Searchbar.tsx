@@ -20,7 +20,7 @@ export default function Searchbar() {
         <input
           type="text"
           placeholder="Search for Books, authors, publishers.."
-          className="w-80 py-3 pl-12 pr-4 h-8 text-[#858585] border-solid border-[#FF6D6D] 
+          className="w-96 py-3 pl-12 pr-4 h-8 text-[#858585] border-solid border-[#FF6D6D] 
                   border rounded-md outline-none bg-[#FDFDFD] focus:bg-[#FDFDFD] focus:border-[#FF6D6D] 
                   focus:border-2"
         />
