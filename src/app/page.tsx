@@ -1,26 +1,41 @@
-"use client"
-import Hovertext from "@/components/Hovertext";
-import { useAppDispatch } from "../../hooks";
-import { fetchIntialreadlist, postreadlist } from "../../store/readlist.slice";
-import { useEffect } from "react";
-import { fetchIntialbookavail } from "../../store/bookavail.slice";
-import { bookFilter, bookfilter, listBooksHistory } from "../../store/bookfilters.slice";
-import { available_for } from "@prisma/client";
-
+import BookComponent from "@/components/BookComponent";
+import Button from "@/components/Button";
+import Headingtext from "@/components/Headingtext";
+import Navtext from "@/components/Navtext";
+import Slideshow from "@/components/Slideshow";
 export default function Page() {
-  const dispatch=useAppDispatch()
-  useEffect(()=>{dispatch(fetchIntialreadlist())},[])
-  useEffect(()=>{dispatch(postreadlist())},[])
-  useEffect(()=>{dispatch(fetchIntialreadlist())},[])
-  useEffect(()=>{dispatch(fetchIntialbookavail())},[])
- 
+  return (
+    <div className="px-5 w-full">
+      <div className="flex">
+        <div className="flex justify-items-center space-x-16 p-4">
+          <Navtext>Category</Navtext>
+          <Navtext>Best Seller Book</Navtext>
+          <Navtext>Education</Navtext>
+        </div>
+        <div className="flex rowjustify-end p-4 space-x-96">
+          <Button className="w-24 h-10" fullwidth intent={"primary"}>
+            Sell
+          </Button>
+        </div>
+      </div>
 
-    return (
-      <div> 
-        <h1 className="text-3xl font-bold">Hello, Next.js!</h1>
-        <Hovertext />
+      <Slideshow />
+
+      <div className="my-6 mx-4 flex flex-row">
+        <Headingtext>Popular Books</Headingtext>
+      </div>
+      <div className="grid grid-cols-5 gap-5 pb-10">
+        <BookComponent />
+        <BookComponent />
+        <BookComponent />
+        <BookComponent />
+        <BookComponent />
+        <BookComponent />
+        <BookComponent />
+        <BookComponent />
+      </div>
     </div>
-    )
-  }
-  
+  );
+}
+
   
