@@ -15,10 +15,10 @@ export default function RootLayout({ children }: props) {
         <Providers>
           <Navbar />
           <main>{children}</main>
+          <footer>
+            <Footer />
+          </footer>
         </Providers>
-        <footer>
-          <Footer />
-        </footer>
       </body>
     </html>
   );
