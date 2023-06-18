@@ -1,5 +1,7 @@
 import React from "react";
 import Button from "./Button";
+import { IoHeart } from "react-icons/io5";
+import { AiOutlineHeart } from "react-icons/ai";
 
 const BookComponent = () => {
   return (
@@ -10,10 +12,11 @@ const BookComponent = () => {
         className="h-72 w-64"
       />
       <div className="flex flex-col p-3 gap-1">
-        <div>
+        <div className="flex items-center justify-between">
           <label className="text-center font-medium text-lg">
             A Game of Thrones
           </label>
+          <AiOutlineHeart className="text-xl"/>
         </div>
         <label className="font-normal text-md">Rs 949/-</label>
         <Button

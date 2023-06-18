@@ -2,6 +2,7 @@ import React from "react";
 import { faker } from "@faker-js/faker";
 import Headingtext from "./Headingtext";
 import { IoIosArrowBack } from "react-icons/io";
+import BookComponent from "./BookComponent";
 
 interface ProfileDetails {
   name: string;
@@ -49,26 +50,15 @@ const MyProfile: React.FC<ProfileDetails> = ({
               <label>Favourite Books:</label>
             </p>
           </div>
-          <div className="p-2">
-            <img
-              src="https://m.media-amazon.com/images/I/91dSMhdIzTL._AC_UF1000,1000_QL80_.jpg"
-              alt="Image"
-              className="h-28 w-20 rounded-xl border-solid border-2 border-gray-700"
-            />
-          </div>
-          <div className="p-2">
-            <img
-              src="https://s3.ap-south-1.amazonaws.com/storage.commonfolks.in/docs/products/images_full/write-a-new-name-in-the-book-of-life_FrontImage_415.jpg"
-              alt="Image"
-              className="h-28 w-20 rounded-xl border-solid border-2 border-gray-700"
-            />
-          </div>
-          <div className="p-2 ">
-            <img
-              src="https://toppsta.com/images/covers/4/9/0/6/9780141324906.webp?t=1644290789"
-              alt="Image"
-              className="h-28 w-20 rounded-xl border-solid border-2 border-gray-700 "
-            />
+          <div className="grid grid-cols-5 gap-5 pb-10">
+            <BookComponent />
+            <BookComponent />
+            <BookComponent />
+            <BookComponent />
+            <BookComponent />
+            <BookComponent />
+            <BookComponent />
+            <BookComponent />
           </div>
         </div>
       </div>
