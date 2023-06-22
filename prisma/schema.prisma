@@ -37,42 +37,37 @@ model session {
 }
 
 model user {
-  id                String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  username          String     @unique
-  mail_id           String     @unique
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  username          String    @unique
+  mail_id           String    @unique
   ph_no             String?
   password          String
   profile_image     String?
-  readlist          readlist[]
-  buyer             books[]    @relation(name: "buyer")
-  seller            books[]    @relation(name: "seller")
   account           account[]
   session           session[]
-  address           address?   @relation(fields: [addressAddress_id], references: [address_id])
-  addressAddress_id String?    @db.Uuid
+  address           address?  @relation(fields: [addressAddress_id], references: [address_id])
+  addressAddress_id String?   @db.Uuid
+  cart              cart[]
+  books             books[]
 
   @@index([id])
 }
 
 model books {
-  book_id       String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  book_id       String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   book_name     String
   book_type     book_type
   price         Int
-  available_for available_for
-  categories    category[]
+  available_for available_for @default(SALE)
+  categories    String[]
   publisher     String
   author_name   String
   description   String
   image         String
   language      String
-  readlist      readlist[]
-  book_history  book_history[]
   cart          cart[]
-  seller        user?          @relation(name: "seller", fields: [seller_id], references: [id])
-  seller_id     String?        @db.Uuid
-  buyer         user?          @relation(name: "buyer", fields: [buyer_id], references: [id])
-  buyer_id      String?        @db.Uuid
+  user          user?         @relation(fields: [userId], references: [id])
+  userId        String?       @db.Uuid
 }
 
 enum book_type {
@@ -85,27 +80,13 @@ enum available_for {
   RENT
 }
 
-model category {
-  category_id   String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  books         books      @relation(fields: [book_id], references: [book_id])
-  book_id       String     @db.Uuid
-  category_name String
-  related_to    related_to
-}
-
-enum related_to {
-  FICTION
-  NON_FICTION
-}
-
 model events {
   event_id             String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name                 String
   duration             DateTime
   organiser_details    events_org_details @relation(fields: [organiser_details_id], references: [organiser_details_id])
   organiser_details_id String             @db.Uuid
-  location             location           @relation(fields: [location_id], references: [loc_id])
-  location_id          String             @db.Uuid
+  location             String             @db.Text
 }
 
 model events_org_details {
@@ -116,58 +97,20 @@ model events_org_details {
   events               events[]
 }
 
-model location {
-  loc_id      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  loc_address String
-  city        String
-  state       String
-  events      events[]
-  country     String
-  image       String
-}
-
-model readlist {
-  id          String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name        String
-  book        books  @relation(fields: [book_id], references: [book_id])
-  book_id     String @db.Uuid
-  book_name   String
-  description String
-  user        user?  @relation(fields: [user_id], references: [id])
-  user_id     String @db.Uuid
-}
-
 model address {
-  address_id      String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  address_id      String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   pincode         Int
   area_and_street String
   city_or_town    String
   state           String
   landmark        String
   user            user[]
-  order           order[]
-}
-
-model order {
-  order_id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  order_date        DateTime
-  address           address? @relation(fields: [addressAddress_id], references: [address_id])
-  addressAddress_id String?  @db.Uuid
-}
-
-model book_history {
-  id            String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  book_name     books         @relation(fields: [book_id], references: [book_id])
-  book_id       String        @db.Uuid
-  available_for available_for
-  date          DateTime
-  price         Int
-  seller_id     String        @db.Uuid
-  buyer_id      String        @db.Uuid
 }
 
 model cart {
   id       String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   books    books?  @relation(fields: [books_id], references: [book_id])
   books_id String? @db.Uuid
+  user     user?   @relation(fields: [userId], references: [id])
+  userId   String? @db.Uuid
 }

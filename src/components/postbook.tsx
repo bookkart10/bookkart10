@@ -9,6 +9,7 @@ import * as Yup from "yup";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { SupaClient } from "../../utils/supabase";
+import { useSession } from "next-auth/react";
 
 const initialValues = {
   bookname: "",
@@ -40,6 +41,7 @@ export default function Postbook() {
   const [prevImageUrl, setPrevImageUrl] = useState<null | string>();
   const [imageBlob, setImageBlob] = useState<null | File>();
   const posterRef = useRef<HTMLInputElement | null>();
+  const session  = useSession()
 
   return (
     <>
@@ -86,17 +88,7 @@ export default function Postbook() {
               onSubmit={async (values) => {
                 try {
                   if (imageBlob) {
-                    dispatch(
-                      addBook({
-                        author: values.author_name,
-                        available_for: values.available_for,
-                        book_name: values.bookname,
-                        book_price: values.price,
-                        buyer_email: "",
-                        category: values.category,
-                        id: "",
-                      })
-                    );
+                    
                     const posterResponse = await SupaClient.storage
                       .from("posters")
                       .upload(
@@ -109,6 +101,24 @@ export default function Postbook() {
                         }
                       );
                     const posterPath = posterResponse.data?.path;
+                    if(posterPath && session.data?.user)
+                    dispatch(
+                      addBook({
+                        author_name: values.author_name,
+                        available_for: values.available_for as "SALE"|"RENT",
+                        book_name: values.bookname,
+                        price: +values.price,
+                        categories: [values.category],
+                        book_type:values.book_type as "NEW" | "OLD",
+                        description:values.description,
+                        image:posterPath,
+                        language:values.langauge,
+                        publisher:values.publisher,
+                        userId: session.data.user.id,
+                      })
+                    );
+                    alert("book posted")
+                    router.back();
                   }
                 } catch (e) {}
               }}
@@ -265,8 +275,8 @@ export default function Postbook() {
                 pl-2 placeholder:text-opacity-60 focus:ring-1 focus:ring-inset 
                 focus:ring-[#958F8F] sm:text-sm sm:leading-6"
                       >
-                        <option>NEW</option>
-                        <option>OLD</option>
+                        <option value={"NEW"}>NEW</option>
+                        <option value={"OLD"}>OLD</option>
                       </Field>
                       {touched.book_type && errors.book_type && (
                         <span className="text-md text-red-500">
@@ -312,7 +322,7 @@ export default function Postbook() {
                 focus:ring-[#958F8F] sm:text-sm sm:leading-6"
                       >
                         <option value={""}>Select Available for</option>
-                        <option value={"SELL"}>SELL</option>
+                        <option value={"SALE"}>SALE</option>
                         <option value={"RENT"}>RENT</option>
                       </Field>
                       {touched.available_for && errors.available_for && (

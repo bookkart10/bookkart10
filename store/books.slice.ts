@@ -5,10 +5,12 @@ import {
 } from "@reduxjs/toolkit";
 import axios from "axios";
 import { RootState } from ".";
+import { SupaClient } from "../utils/supabase";
+import { Database } from "../types/supabase";
 
 export const addBook = createAsyncThunk<
   any,
-  bookProps,
+  Omit<bookProps,"book_id"|"user">,
   {
     rejectValue: {
       msg: string;
@@ -17,27 +19,22 @@ export const addBook = createAsyncThunk<
 >(
   "/bookposts/addBook",
   async (payload, { fulfillWithValue, rejectWithValue, getState }) => {
-    var data;
     try {
-      const formData = new FormData();
-      formData.append("book_name", payload.book_name);
-      formData.append("author", payload.author);
-      formData.append("category", payload.category);
-      formData.append("book_price", payload.book_price);
-      formData.append("available_for", payload.available_for);
-      formData.append("seller_name", "seller");
-      formData.append("seller_email", "seller@gmail.com");
-      formData.append("seller_phone", "123455");
-      formData.append("buyer_email", payload.buyer_email);
-
-      const response = await axios({
-        url: process.env.NEXT_PUBLIC_STAFF_URL + "bookpostraise.php",
-        method: "POST",
-        data: formData,
+      await SupaClient.from("books").insert({
+        author_name: payload.author_name,
+        book_name: payload.book_name,
+        book_type: payload.book_type,
+        description: payload.description,
+        image: payload.image,
+        language: payload.language,
+        price: payload.price,
+        publisher: payload.publisher,
+        available_for: payload.available_for,
+        categories: payload.categories,
+        userId: payload.userId,
       });
-      data = response.data;
       //dispatch(retrieveProfile())
-      return fulfillWithValue(data);
+      return fulfillWithValue(true);
     } catch (error: any) {
       return rejectWithValue({ msg: error.response.data.msg });
     }
@@ -57,14 +54,7 @@ export const booksList = createAsyncThunk<
   async (_payload, { fulfillWithValue, rejectWithValue, getState }) => {
     var data;
     try {
-      const formData = new FormData();
-      const state = getState() as RootState;
-      formData.append("emailid", "selller@gamil.com");
-      const response = await axios({
-        url: process.env.NEXT_PUBLIC_STAFF_URL + "bookpostlist.php",
-        method: "POST",
-        data: formData,
-      });
+      const response = await SupaClient.from("books").select("*,user(*)");
       data = response.data;
       return fulfillWithValue(data);
     } catch (error: any) {
@@ -119,23 +109,19 @@ export const updateBook = createAsyncThunk<
   ) => {
     var data;
     try {
-      const formData = new FormData();
-      formData.append("book_name", payload.book_name);
-      formData.append("author", payload.author);
-      formData.append("category", payload.category);
-      formData.append("book_price", payload.book_price);
-      formData.append("available_for", payload.available_for);
-      formData.append("seller_name", "selller");
-      formData.append("seller_email", "seller@gmail.com");
-      formData.append("seller_phone", "1234567");
-      formData.append("buyer_email", payload.buyer_email);
-
-      const response = await axios({
-        url: process.env.NEXT_PUBLIC_STAFF_URL + "bookpostupdate.php",
-        method: "POST",
-        data: formData,
+      const response = await SupaClient.from("books").update({
+        author_name: payload.author_name,
+        book_name: payload.book_name,
+        book_type: payload.book_type,
+        description: payload.description,
+        image: payload.image,
+        language: payload.language,
+        price: payload.price,
+        publisher: payload.publisher,
+        available_for: payload.available_for,
+        categories: payload.categories,
+        userId: payload.userId,
       });
-      data = response.data;
       //dispatch(retrieveProfile())
       return fulfillWithValue(data);
     } catch (error: any) {
@@ -182,18 +168,9 @@ interface InitialState {
   data: [];
 }
 
-interface bookProps {
-  id: string;
-  book_name: string;
-  author: string;
-  book_price: string;
-  category: string;
-  available_for: string;
-  // seller_name: string;
-  // seller_email: string;
-  // seller_phone: string;
-  buyer_email: string;
-}
+export type bookProps = Database["public"]["Tables"]["books"]["Row"] & {
+  user: Database["public"]["Tables"]["user"]["Row"];
+};
 
 const initialState: InitialState = {
   pending: false,
@@ -203,7 +180,7 @@ const initialState: InitialState = {
 };
 
 const BooksAdapter = createEntityAdapter<bookProps>({
-  selectId: (book) => book.id,
+  selectId: (book) => book.book_id,
 });
 
 export const BooksSlice = createSlice({
@@ -216,64 +193,18 @@ export const BooksSlice = createSlice({
     pending: false,
     error: null,
   }),
-  extraReducers: {
-    [addBook.pending.toString()]: (state, action) => {
-      state.pending = true;
-    },
-    [addBook.fulfilled.toString()]: (state, action) => {
-      state.error = null;
-    },
-    [addBook.rejected.toString()]: (state, action) => {
-      state.error = action.payload?.msg;
-      state.pending = false;
-    },
-
-    [booksList.pending.toString()]: (state, action) => {
-      state.pending = true;
-    },
-    [booksList.fulfilled.toString()]: (state, action) => {
-      state.pending = false;
-      BooksAdapter.setMany(state, action.payload);
-    },
-    [booksList.rejected.toString()]: (state, action) => {
-      state.pending = false;
-      state.error = action.payload?.msg;
-    },
-
-    [booksListView.pending.toString()]: (state, action) => {
-      state.pending = true;
-    },
-    [booksListView.fulfilled.toString()]: (state, action) => {
-      state.pending = false;
-      BooksAdapter.setMany(state, action.payload);
-    },
-    [booksListView.rejected.toString()]: (state, action) => {
-      state.pending = false;
-      state.error = action.payload?.msg;
-    },
-
-    [updateBook.pending.toString()]: (state, action) => {
-      state.pending = true;
-    },
-    [updateBook.fulfilled.toString()]: (state, action) => {
-      state.error = null;
-    },
-    [updateBook.rejected.toString()]: (state, action) => {
-      state.error = action.payload?.msg;
-      state.pending = false;
-    },
-    [bookdelete.pending.toString()]: (state, action) => {
-      state.pending = true;
-    },
-    [bookdelete.fulfilled.toString()]: (state, action) => {
-      state.error = null;
-    },
-    [bookdelete.rejected.toString()]: (state, action) => {
-      state.error = action.payload?.msg;
-      state.pending = false;
-    },
+  extraReducers(builder) {
+    builder
+      .addCase(booksList.pending, (state, action) => {
+        state.pending = true;
+      })
+      .addCase(booksList.fulfilled, (state, action) => {
+        state.pending = false;
+        BooksAdapter.setAll(state, action.payload);
+      });
   },
 });
 
-
-export const BoosSelector = BooksAdapter.getSelectors<RootState>(state=>state.bookposts);
+export const BooksSelector = BooksAdapter.getSelectors<RootState>(
+  (state) => state.bookposts
+);
