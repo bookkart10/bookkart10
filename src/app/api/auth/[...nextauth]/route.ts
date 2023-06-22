@@ -4,6 +4,7 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 import Credentials from "next-auth/providers/credentials";
 import { compare, hash } from "bcrypt";
+import axios from "axios";
 
 const prisma = new PrismaClient();
 
@@ -32,30 +33,17 @@ export const NextAuthOptions: AuthOptions = {
 
         if (credentials?.for == "sign-in") {
           //if email or password is not present
-          const user = await prisma.user.findUnique({
-            where: {
-              mail_id: credentials.userId,
-            },
-          });
-
-          //if user is not found in the database
-          if (!user || !user.password) return null;
-
-          //decrypt password
-          const isValidPassword = await compare(
-            credentials.password,
-            user.password
-          );
-
-          //if is not valid password
-          if (!isValidPassword) return null;
+          const formData = new FormData();
+          formData.append("emailid",credentials.userId)
+          formData.append("password",credentials.password)
+          const user = await axios.post(process.env.NEXT_PUBLIC_API_URL+"login.php",formData)
 
           return {
-            id: user.id,
-            email: user.mail_id!,
-            image: user.profile_image!,
-            name: user.username!,
-          };
+            id: user.data.id,
+            email: user.data.email!,
+            image: user.data.profile_pic_url!,
+            name: user.data.name!,
+          }
         } else {
           const hashedPassword = await hash(credentials.password, 12);
           const user = await prisma.user.create({

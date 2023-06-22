@@ -189,9 +189,9 @@ interface bookProps {
   book_price: string;
   category: string;
   available_for: string;
-  seller_name: string;
-  seller_email: string;
-  seller_phone: string;
+  // seller_name: string;
+  // seller_email: string;
+  // seller_phone: string;
   buyer_email: string;
 }
 
