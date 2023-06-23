@@ -1,7 +1,5 @@
 import React from "react";
 import Button from "./Button";
-import { IoHeart } from "react-icons/io5";
-import { AiOutlineHeart } from "react-icons/ai";
 import { bookProps } from "../../store/books.slice";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,11 +7,13 @@ import { SupaClient } from "../../utils/supabase";
 import { useAppDispatch } from "../../hooks";
 import { CartSelector, addToCart, removeOne } from "../../store/cart.slice";
 import { useAppSelector } from "../../store";
+import { useSession } from "next-auth/react";
 
 const BookComponent = ({ feed }: { feed: bookProps }) => {
   const dispatch = useAppDispatch();
   const cart = useAppSelector(CartSelector.selectIds);
   const isALerady = cart.includes(feed.book_id);
+  const session = useSession();
 
   return (
     <div className="border overflow-hidden bg-[#FFF1F1] hover:cursor-pointer hover:shadow-xl hover:scale-105 transition-all duration-300 rounded-md">
@@ -41,30 +41,34 @@ const BookComponent = ({ feed }: { feed: bookProps }) => {
         </div>
       </Link>
       <div className="w-full p-3">
-        {isALerady ? (
-          <Button
-            onClick={() => {
-              dispatch(removeOne(feed.book_id));
-              alert("Removed");
-            }}
-            className="py-2 text-sm rounded-sm"
-            fullwidth
-            intent={"secondary"}
-          >
-            Remove From Cart
-          </Button>
-        ) : (
-          <Button
-            onClick={() => {
-              dispatch(addToCart(feed));
-              alert("This book added to cart");
-            }}
-            className="py-2 text-sm rounded-sm"
-            fullwidth
-            intent={"primary"}
-          >
-            Add to Cart
-          </Button>
+        {feed.book_id !== session.data?.user?.id && (
+          <>
+            {isALerady ? (
+              <Button
+                onClick={() => {
+                  dispatch(removeOne(feed.book_id));
+                  alert("Removed");
+                }}
+                className="py-2 text-sm rounded-sm"
+                fullwidth
+                intent={"secondary"}
+              >
+                Remove From Cart
+              </Button>
+            ) : (
+              <Button
+                onClick={() => {
+                  dispatch(addToCart(feed));
+                  alert("This book added to cart");
+                }}
+                className="py-2 text-sm rounded-sm"
+                fullwidth
+                intent={"primary"}
+              >
+                Add to Cart
+              </Button>
+            )}
+          </>
         )}
       </div>
     </div>
