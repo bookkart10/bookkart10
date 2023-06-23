@@ -1,14 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useSelector,TypedUseSelectorHook } from "react-redux";
 import { BooksSlice } from "./books.slice";
-// import { BestSellerSlice } from "./bestsellers.slice";
-// import { bookavailabilitySlice } from "./bookavailability.slice";
-// import { Historyslice } from "./history.slice";
-// import { StoreFairsSlice } from "./storefairs.slice";
+import { CartSlice } from "./cart.slice";
 
 export const store = configureStore({
   reducer: {
-    [BooksSlice.name]:BooksSlice.reducer
+    [BooksSlice.name]:BooksSlice.reducer,
+    [CartSlice.name]:CartSlice.reducer
   },
 });
 

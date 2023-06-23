@@ -6,8 +6,15 @@ import { bookProps } from "../../store/books.slice";
 import Image from "next/image";
 import Link from "next/link";
 import { SupaClient } from "../../utils/supabase";
+import { useAppDispatch } from "../../hooks";
+import { CartSelector, addToCart, removeOne } from "../../store/cart.slice";
+import { useAppSelector } from "../../store";
 
 const BookComponent = ({ feed }: { feed: bookProps }) => {
+  const dispatch = useAppDispatch();
+  const cart = useAppSelector(CartSelector.selectIds);
+  const isALerady = cart.includes(feed.book_id);
+
   return (
     <div className="border overflow-hidden bg-[#FFF1F1] hover:cursor-pointer hover:shadow-xl hover:scale-105 transition-all duration-300 rounded-md">
       <Link href={`/v/${feed.book_id}`}>
@@ -34,13 +41,31 @@ const BookComponent = ({ feed }: { feed: bookProps }) => {
         </div>
       </Link>
       <div className="w-full p-3">
-        <Button
-          className="py-2 text-sm rounded-sm"
-          fullwidth
-          intent={"primary"}
-        >
-          Add to Cart
-        </Button>
+        {isALerady ? (
+          <Button
+            onClick={() => {
+              dispatch(removeOne(feed.book_id));
+              alert("Removed");
+            }}
+            className="py-2 text-sm rounded-sm"
+            fullwidth
+            intent={"secondary"}
+          >
+            Remove From Cart
+          </Button>
+        ) : (
+          <Button
+            onClick={() => {
+              dispatch(addToCart(feed));
+              alert("This book added to cart");
+            }}
+            className="py-2 text-sm rounded-sm"
+            fullwidth
+            intent={"primary"}
+          >
+            Add to Cart
+          </Button>
+        )}
       </div>
     </div>
   );

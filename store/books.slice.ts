@@ -1,4 +1,5 @@
 import {
+  EntityState,
   createAsyncThunk,
   createEntityAdapter,
   createSlice,
@@ -10,7 +11,7 @@ import { Database } from "../types/supabase";
 
 export const addBook = createAsyncThunk<
   any,
-  Omit<bookProps,"book_id"|"user">,
+  Omit<bookProps, "book_id" | "user">,
   {
     rejectValue: {
       msg: string;
@@ -43,7 +44,7 @@ export const addBook = createAsyncThunk<
 
 export const booksList = createAsyncThunk<
   any,
-  void,
+  string,
   {
     rejectValue: {
       msg: string;
@@ -54,7 +55,33 @@ export const booksList = createAsyncThunk<
   async (_payload, { fulfillWithValue, rejectWithValue, getState }) => {
     var data;
     try {
-      const response = await SupaClient.from("books").select("*,user(*)");
+      const response = await SupaClient.from("books")
+        .select("*,user(*)")
+        .neq("userId", _payload);
+      data = response.data;
+      return fulfillWithValue(data);
+    } catch (error: any) {
+      return rejectWithValue({ msg: error.response.data.msg });
+    }
+  }
+);
+
+export const mybookList = createAsyncThunk<
+  any,
+  string,
+  {
+    rejectValue: {
+      msg: string;
+    };
+  }
+>(
+  "/bookposts/mybooklist",
+  async (_payload, { fulfillWithValue, rejectWithValue, getState }) => {
+    var data;
+    try {
+      const response = await SupaClient.from("books")
+        .select("*,user(*)")
+        .eq("userId", _payload);
       data = response.data;
       return fulfillWithValue(data);
     } catch (error: any) {
@@ -172,14 +199,11 @@ export type bookProps = Database["public"]["Tables"]["books"]["Row"] & {
   user: Database["public"]["Tables"]["user"]["Row"];
 };
 
-const initialState: InitialState = {
-  pending: false,
-  error: null,
-  success: null,
-  data: [],
-};
-
 const BooksAdapter = createEntityAdapter<bookProps>({
+  selectId: (book) => book.book_id,
+});
+
+const MyBooksAdapter = createEntityAdapter<bookProps>({
   selectId: (book) => book.book_id,
 });
 
@@ -189,9 +213,11 @@ export const BooksSlice = createSlice({
   initialState: BooksAdapter.getInitialState<{
     pending: boolean;
     error: null | string | any;
+    mybooks: EntityState<bookProps>;
   }>({
     pending: false,
     error: null,
+    mybooks: MyBooksAdapter.getInitialState(),
   }),
   extraReducers(builder) {
     builder
@@ -201,10 +227,21 @@ export const BooksSlice = createSlice({
       .addCase(booksList.fulfilled, (state, action) => {
         state.pending = false;
         BooksAdapter.setAll(state, action.payload);
+      })
+      .addCase(mybookList.pending, (state, action) => {
+        state.pending = true;
+      })
+      .addCase(mybookList.fulfilled, (state, action) => {
+        state.pending = false;
+        MyBooksAdapter.setAll(state.mybooks, action.payload);
       });
   },
 });
 
 export const BooksSelector = BooksAdapter.getSelectors<RootState>(
   (state) => state.bookposts
+);
+
+export const MyBooksSelector = MyBooksAdapter.getSelectors<RootState>(
+  (state) => state.bookposts.mybooks
 );
