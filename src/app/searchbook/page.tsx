@@ -1,3 +1,4 @@
+"use client"
 import BookComponent from "@/components/BookComponent";
 import { useSearchParams } from "next/navigation";
 import { useAppSelector } from "../../../store";
