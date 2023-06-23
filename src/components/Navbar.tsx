@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Searchbar from "./Searchbar";
 import Navtext from "./Navtext";
 import { MdAccountCircle } from "react-icons/md";
