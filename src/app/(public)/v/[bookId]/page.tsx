@@ -2,7 +2,10 @@
 import { useParams } from "next/navigation";
 import React from "react";
 import { useAppSelector } from "../../../../../store";
-import { BooksSelector } from "../../../../../store/books.slice";
+import {
+  BooksSelector,
+  MyBooksSelector,
+} from "../../../../../store/books.slice";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import Image from "next/image";
 import { faker } from "@faker-js/faker";
@@ -17,8 +20,10 @@ import { useAppDispatch } from "../../../../../hooks";
 export default function ViewBook() {
   const bookId = useParams().bookId;
   const router = useRouter();
-  const book = useAppSelector((state) =>
-    BooksSelector.selectById(state, bookId)
+  const book = useAppSelector(
+    (state) =>
+      BooksSelector.selectById(state, bookId) ??
+      MyBooksSelector.selectById(state, bookId)
   );
   const sesssion = useSession();
   const dispatch = useAppDispatch();
