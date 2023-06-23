@@ -41,7 +41,7 @@ const BookComponent = ({ feed }: { feed: bookProps }) => {
         </div>
       </Link>
       <div className="w-full p-3">
-        {feed.book_id !== session.data?.user?.id && (
+        {feed.userId !== session.data?.user?.id && (
           <>
             {isALerady ? (
               <Button
