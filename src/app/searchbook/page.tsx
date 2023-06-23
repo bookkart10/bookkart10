@@ -3,17 +3,22 @@ import BookComponent from "@/components/BookComponent";
 import { useSearchParams } from "next/navigation";
 import { useAppSelector } from "../../../store";
 import { BooksSelector } from "../../../store/books.slice";
+import { shallowEqual } from "react-redux";
 
 export default function SearchBookPage() {
   const query = useSearchParams().get("q");
 
   console.log(query);
 
-  const books = useAppSelector((state) =>
-    BooksSelector.selectAll(state).filter((book) => {
-      book.book_name.toLowerCase() == query?.toLowerCase();
-    })
+  const books = useAppSelector(
+      BooksSelector.selectAll,
+    shallowEqual
   );
+
+  const filteredBooks = books.filter((book) => {
+    const regex = new RegExp(`${query}`,"i");
+    return book.book_name.search(regex) > 0 ? false : true
+  })
 
   return (
     <div className="min-h-screen h-fit w-screen">
@@ -23,8 +28,8 @@ export default function SearchBookPage() {
         </h1>
       </div>
       <div className="grid grid-cols-5 gap-5 px-10 pb-10">
-        {books.length > 0 ? (
-          books.map((book) => <BookComponent key={book.book_id} feed={book} />)
+        {filteredBooks.length > 0 ? (
+          filteredBooks.map((book) => <BookComponent key={book.book_id} feed={book} />)
         ) : (
           <h1>No result found !</h1>
         )}

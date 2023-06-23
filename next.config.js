@@ -14,6 +14,8 @@ const nextConfig = {
       },
       {
         hostname:"localhost"
+      },{
+        hostname:"qsewlleybhfgrufchhpk.supabase.co"
       }
     ]
   }
