@@ -1,22 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { readlistSlice } from "./readlist.slice";
-import { useSelector } from "react-redux";
-import { bookfairSlice } from "./bookfair.slice";
-import { bookFilter } from "./bookfilters.slice";
-import { bookavailSlice } from "./bookavail.slice";
+import { useSelector,TypedUseSelectorHook } from "react-redux";
+import { BooksSlice } from "./books.slice";
+import { CartSlice } from "./cart.slice";
 
 export const store = configureStore({
   reducer: {
-    [readlistSlice.name]: readlistSlice.reducer,
-    [bookfairSlice.name]: bookfairSlice.reducer,
-    [bookavailSlice.name]: bookavailSlice.reducer,
-    [bookFilter.name]: bookFilter.reducer,
+    [BooksSlice.name]:BooksSlice.reducer,
+    [CartSlice.name]:CartSlice.reducer
   },
 });
 
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
-export const useAppSelector = useSelector<RootState>
-
-
-
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+export const useAppSelector:TypedUseSelectorHook<RootState> = useSelector;

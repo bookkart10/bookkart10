@@ -1,43 +1,37 @@
+"use client";
 import BookComponent from "@/components/BookComponent";
-import { IoFilter } from "react-icons/io5";
-export default function Page() {
-  return (
-    <div>
-      <div className="my-6 mx-4   ">
-        <div className="font-semibold text-lg ">
-          Search result for book series
-        </div>
-        <div className="font-semibold text-2xl flex flex-row-reverse  pr-3 ">
-          Filter 
-          <IoFilter size={24}/>
-      </div>
-      
-    </div><div className="space-y-10">
-        <div className="flex gap-8">
-          <BookComponent />
-          <BookComponent />
-          <BookComponent />
-          <BookComponent />
-          <BookComponent />
-          <BookComponent />
-        </div>
+import { useSearchParams } from "next/navigation";
+import { useAppSelector } from "../../../store";
+import { BooksSelector } from "../../../store/books.slice";
+import { shallowEqual } from "react-redux";
 
-        <div className="flex gap-8">
-          <BookComponent />
-          <BookComponent />
-          <BookComponent />
-          <BookComponent />
-          <BookComponent />
-          <BookComponent />
-        </div>
-        <div className="flex gap-8">
-          <BookComponent />
-          <BookComponent />
-          <BookComponent />
-          <BookComponent />
-          <BookComponent />
-          <BookComponent />
-        </div>
+export default function SearchBookPage() {
+  const query = useSearchParams().get("q");
+
+  console.log(query);
+
+  const books = useAppSelector(
+      BooksSelector.selectAll,
+    shallowEqual
+  );
+
+  const filteredBooks = books.filter((book) => {
+    return book.book_name.toLowerCase() == query?.toLowerCase()
+  })
+
+  return (
+    <div className="min-h-screen h-fit w-screen">
+      <div className="p-10">
+        <h1 className="font-semibold text-2xl ">
+          Search result for <b>{query}</b>
+        </h1>
+      </div>
+      <div className="grid grid-cols-5 gap-5 px-10 pb-10">
+        {filteredBooks.length > 0 ? (
+          filteredBooks.map((book) => <BookComponent key={book.book_id} feed={book} />)
+        ) : (
+          <h1>No result found !</h1>
+        )}
       </div>
     </div>
   );

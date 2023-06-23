@@ -39,7 +39,7 @@ const Slideshow = () => {
   }, [activeSlide]);
 
   return (
-    <div className="relative h-72">
+    <div className="relative h-72 rounded-md overflow-hidden">
       <div className="absolute inset-0 flex items-center justify-center">
         <img className="w-full h-full object-cover" src={slides[activeSlide-1].image} alt={slides[activeSlide-1].caption} />
       </div>

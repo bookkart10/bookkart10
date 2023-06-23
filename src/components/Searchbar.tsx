@@ -1,7 +1,18 @@
-import React from "react";
+"use client";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 export default function Searchbar() {
+  const [q, setQ] = useState("");
+  const router = useRouter();
+
   return (
-    <form className="max-w-sm px-4">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        router.push(`/searchbook?q=${q}`);
+      }}
+      className="max-w-sm px-4"
+    >
       <div className="relative">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -18,6 +29,8 @@ export default function Searchbar() {
           />
         </svg>
         <input
+          onChange={(e) => setQ(e.target.value)}
+          value={q}
           type="text"
           placeholder="Search for Books, authors, publishers.."
           className="w-96 py-3 pl-12 pr-4 h-8 text-[#858585] border-solid border-[#FF6D6D] 

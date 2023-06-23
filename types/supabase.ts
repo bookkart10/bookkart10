@@ -34,33 +34,74 @@ export interface Database {
   }
   public: {
     Tables: {
-      book_history: {
+      account: {
         Row: {
-          available_for: Database["public"]["Enums"]["available_for"]
-          book_id: string
-          buyer_id: string
-          date: string
+          access_token: string | null
+          expires_at: number | null
           id: string
-          price: number
-          seller_id: string
+          id_token: string | null
+          provider: string
+          providerAccountId: string
+          refresh_token: string | null
+          scope: string | null
+          session_state: string | null
+          token_type: string | null
+          type: string
+          userId: string
         }
         Insert: {
-          available_for: Database["public"]["Enums"]["available_for"]
-          book_id: string
-          buyer_id: string
-          date: string
+          access_token?: string | null
+          expires_at?: number | null
           id?: string
-          price: number
-          seller_id: string
+          id_token?: string | null
+          provider: string
+          providerAccountId: string
+          refresh_token?: string | null
+          scope?: string | null
+          session_state?: string | null
+          token_type?: string | null
+          type: string
+          userId: string
         }
         Update: {
-          available_for?: Database["public"]["Enums"]["available_for"]
-          book_id?: string
-          buyer_id?: string
-          date?: string
+          access_token?: string | null
+          expires_at?: number | null
           id?: string
-          price?: number
-          seller_id?: string
+          id_token?: string | null
+          provider?: string
+          providerAccountId?: string
+          refresh_token?: string | null
+          scope?: string | null
+          session_state?: string | null
+          token_type?: string | null
+          type?: string
+          userId?: string
+        }
+      }
+      address: {
+        Row: {
+          address_id: string
+          area_and_street: string
+          city_or_town: string
+          landmark: string
+          pincode: number
+          state: string
+        }
+        Insert: {
+          address_id?: string
+          area_and_street: string
+          city_or_town: string
+          landmark: string
+          pincode: number
+          state: string
+        }
+        Update: {
+          address_id?: string
+          area_and_street?: string
+          city_or_town?: string
+          landmark?: string
+          pincode?: number
+          state?: string
         }
       }
       books: {
@@ -70,25 +111,27 @@ export interface Database {
           book_id: string
           book_name: string
           book_type: Database["public"]["Enums"]["book_type"]
+          categories: string[] | null
           description: string
           image: string
           language: string
           price: number
           publisher: string
-          ratings: string
+          userId: string | null
         }
         Insert: {
           author_name: string
-          available_for: Database["public"]["Enums"]["available_for"]
+          available_for?: Database["public"]["Enums"]["available_for"]
           book_id?: string
           book_name: string
           book_type: Database["public"]["Enums"]["book_type"]
+          categories?: string[] | null
           description: string
           image: string
           language: string
           price: number
           publisher: string
-          ratings: string
+          userId?: string | null
         }
         Update: {
           author_name?: string
@@ -96,67 +139,51 @@ export interface Database {
           book_id?: string
           book_name?: string
           book_type?: Database["public"]["Enums"]["book_type"]
+          categories?: string[] | null
           description?: string
           image?: string
           language?: string
           price?: number
           publisher?: string
-          ratings?: string
+          userId?: string | null
         }
       }
       cart: {
         Row: {
           books_id: string | null
           id: string
+          userId: string | null
         }
         Insert: {
           books_id?: string | null
           id?: string
+          userId?: string | null
         }
         Update: {
           books_id?: string | null
           id?: string
-        }
-      }
-      category: {
-        Row: {
-          book_id: string
-          category_id: string
-          category_name: string
-          related_to: Database["public"]["Enums"]["related_to"]
-        }
-        Insert: {
-          book_id: string
-          category_id?: string
-          category_name: string
-          related_to: Database["public"]["Enums"]["related_to"]
-        }
-        Update: {
-          book_id?: string
-          category_id?: string
-          category_name?: string
-          related_to?: Database["public"]["Enums"]["related_to"]
+          userId?: string | null
         }
       }
       events: {
         Row: {
           duration: string
           event_id: string
-          location_id: string
+          location: string
           name: string
           organiser_details_id: string
         }
         Insert: {
           duration: string
           event_id?: string
-          location_id: string
+          location: string
           name: string
           organiser_details_id: string
         }
         Update: {
           duration?: string
           event_id?: string
-          location_id?: string
+          location?: string
           name?: string
           organiser_details_id?: string
         }
@@ -181,118 +208,52 @@ export interface Database {
           ph_no?: string
         }
       }
-      location: {
+      session: {
         Row: {
-          city: string
-          country: string
-          image: string
-          loc_address: string
-          loc_id: string
-          state: string
-        }
-        Insert: {
-          city: string
-          country: string
-          image: string
-          loc_address: string
-          loc_id?: string
-          state: string
-        }
-        Update: {
-          city?: string
-          country?: string
-          image?: string
-          loc_address?: string
-          loc_id?: string
-          state?: string
-        }
-      }
-      order: {
-        Row: {
-          order_date: string
-          order_id: string
-        }
-        Insert: {
-          order_date: string
-          order_id?: string
-        }
-        Update: {
-          order_date?: string
-          order_id?: string
-        }
-      }
-      rating: {
-        Row: {
-          book_id: string
-          description: string | null
-          rating_id: string
-          rating_value: number
-          user_id: string
-        }
-        Insert: {
-          book_id: string
-          description?: string | null
-          rating_id?: string
-          rating_value: number
-          user_id: string
-        }
-        Update: {
-          book_id?: string
-          description?: string | null
-          rating_id?: string
-          rating_value?: number
-          user_id?: string
-        }
-      }
-      readlist: {
-        Row: {
-          book_id: string
-          book_name: string
-          description: string
+          expires: string
           id: string
-          name: string
-          user_id: string
+          sessionToken: string
+          userId: string
         }
         Insert: {
-          book_id: string
-          book_name: string
-          description: string
+          expires: string
           id?: string
-          name: string
-          user_id: string
+          sessionToken: string
+          userId: string
         }
         Update: {
-          book_id?: string
-          book_name?: string
-          description?: string
+          expires?: string
           id?: string
-          name?: string
-          user_id?: string
+          sessionToken?: string
+          userId?: string
         }
       }
       user: {
         Row: {
+          addressAddress_id: string | null
+          id: string
           mail_id: string
           password: string
-          ph_no: string
-          profile_image: string
-          user_id: string
+          ph_no: string | null
+          profile_image: string | null
           username: string
         }
         Insert: {
+          addressAddress_id?: string | null
+          id?: string
           mail_id: string
           password: string
-          ph_no: string
-          profile_image: string
-          user_id?: string
+          ph_no?: string | null
+          profile_image?: string | null
           username: string
         }
         Update: {
+          addressAddress_id?: string | null
+          id?: string
           mail_id?: string
           password?: string
-          ph_no?: string
-          profile_image?: string
-          user_id?: string
+          ph_no?: string | null
+          profile_image?: string | null
           username?: string
         }
       }
