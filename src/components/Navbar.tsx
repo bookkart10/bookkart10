@@ -26,13 +26,11 @@ export default function Navbar() {
           <Searchbar />
         </div>
         <div className="flex items-center space-x-10 px-5">
-          <Navtext isActive>Home</Navtext>
-          <Link href={"/events"}>
-            <Navtext>Events</Navtext>
-          </Link>
-          <Link href={"/bookstore"}>
-            <Navtext>Book Store</Navtext>
-          </Link>
+          <Navtext href={"/"} isActive>
+            Home
+          </Navtext>
+          <Navtext href={"/events"}>Events</Navtext>
+          <Navtext href={"/bookstore"}>Book Store</Navtext>
           <Link href={session.data?.user ? "/postbook" : "/signin"}>
             <Button>Sell</Button>
           </Link>
