@@ -16,8 +16,7 @@ export default function SearchBookPage() {
   );
 
   const filteredBooks = books.filter((book) => {
-    const regex = new RegExp(`${query}`,"i");
-    return book.book_name.search(regex) > 0 ? false : true
+    return book.book_name.toLowerCase() == query?.toLowerCase()
   })
 
   return (

@@ -9,6 +9,10 @@ import { faker } from "@faker-js/faker";
 import { useRouter } from "next/navigation";
 import Button from "@/components/Button";
 import { SupaClient } from "../../../../../utils/supabase";
+import { useSession } from "next-auth/react";
+import { addToCart } from "../../../../../store/cart.slice";
+import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../../../../../hooks";
 
 export default function ViewBook() {
   const bookId = useParams().bookId;
@@ -16,8 +20,10 @@ export default function ViewBook() {
   const book = useAppSelector((state) =>
     BooksSelector.selectById(state, bookId)
   );
+  const sesssion = useSession();
+  const dispatch = useAppDispatch();
 
-  if (!book)
+  if (!book?.book_id)
     return (
       <div className="h-screen bg-pink-50/80 w-screen flex items-center justify-center">
         <div className="w-3/4 h-4/5 rounded-lg shadow-lg bg-slate-200 animate-pulse"></div>
@@ -91,7 +97,33 @@ export default function ViewBook() {
                   </span>
                 </div>
               </div>
-              <Button className="w-full py-2">Add To Cart</Button>
+
+              {book.user.id == sesssion.data?.user?.id ? (
+                <Button
+                  className="w-full py-2"
+                  intent={"secondary"}
+                  onClick={async () => {
+                    const res = await SupaClient.from("books")
+                      .delete()
+                      .eq("book_id", book.book_id);
+                    if (!res.error) {
+                      router.back();
+                      router.refresh();
+                    }
+                  }}
+                >
+                  Remove
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => {
+                    dispatch(addToCart(book));
+                  }}
+                  className="w-full py-2"
+                >
+                  Add To Cart
+                </Button>
+              )}
             </div>
           </div>
         </div>

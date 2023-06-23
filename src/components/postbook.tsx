@@ -41,7 +41,7 @@ export default function Postbook() {
   const [prevImageUrl, setPrevImageUrl] = useState<null | string>();
   const [imageBlob, setImageBlob] = useState<null | File>();
   const posterRef = useRef<HTMLInputElement | null>();
-  const session  = useSession()
+  const session = useSession();
 
   return (
     <>
@@ -88,7 +88,6 @@ export default function Postbook() {
               onSubmit={async (values) => {
                 try {
                   if (imageBlob) {
-                    
                     const posterResponse = await SupaClient.storage
                       .from("posters")
                       .upload(
@@ -101,24 +100,27 @@ export default function Postbook() {
                         }
                       );
                     const posterPath = posterResponse.data?.path;
-                    if(posterPath && session.data?.user)
-                    dispatch(
-                      addBook({
-                        author_name: values.author_name,
-                        available_for: values.available_for as "SALE"|"RENT",
-                        book_name: values.bookname,
-                        price: +values.price,
-                        categories: [values.category],
-                        book_type:values.book_type as "NEW" | "OLD",
-                        description:values.description,
-                        image:posterPath,
-                        language:values.langauge,
-                        publisher:values.publisher,
-                        userId: session.data.user.id,
-                      })
-                    );
-                    alert("book posted")
-                    router.back();
+                    if (posterPath && session.data?.user)
+                      dispatch(
+                        addBook({
+                          author_name: values.author_name,
+                          available_for: values.available_for as
+                            | "SALE"
+                            | "RENT",
+                          book_name: values.bookname,
+                          price: +values.price,
+                          categories: [values.category],
+                          book_type: values.book_type as "NEW" | "OLD",
+                          description: values.description,
+                          image: posterPath,
+                          language: values.langauge,
+                          publisher: values.publisher,
+                          userId: session.data.user.id,
+                        })
+                      );
+                    alert("book posted");
+                    router.replace("/");
+                    router.refresh();
                   }
                 } catch (e) {}
               }}
