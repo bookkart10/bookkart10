@@ -19,7 +19,7 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-5 gap-5 pb-10 px-5">
             {MyBooks.map((book) => (
-              <BookComponent feed={book} />
+              <BookComponent key={book.book_id} feed={book} />
             ))}
           </div>
         </>
@@ -28,8 +28,8 @@ export default function Home() {
         <Headingtext>Popular Books</Headingtext>
       </div>
       <div className="grid grid-cols-5 gap-5 pb-10 px-5">
-        {books.map((book) => (
-          <BookComponent feed={book} />
+        {books.length>0 && books.map((book) => (
+          <BookComponent key={book.book_id} feed={book} />
         ))}
       </div>
     </div>

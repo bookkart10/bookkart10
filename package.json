@@ -30,6 +30,7 @@
     "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
     "class-variance-authority": "^0.6.0",
+    "encoding": "^0.1.13",
     "eslint": "8.39.0",
     "eslint-config-next": "13.3.4",
     "formik": "^2.4.2",

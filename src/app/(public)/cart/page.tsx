@@ -28,8 +28,8 @@ export default function ViewBook() {
           <h1 className="text-2xl font-semibold">Your Cart</h1>
         </div>
         <div className="grid grid-cols-4 gap-5 pb-10 px-5">
-          {cartbooks.map((book) => (
-            <BookComponent feed={book} />
+          {cartbooks?.map((book) => (
+            <BookComponent key={book.book_id} feed={book} />
           ))}
         </div>
       </div>

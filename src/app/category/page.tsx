@@ -16,7 +16,7 @@ export default function Page() {
           <Navtext>Action and adventure</Navtext>
           <Navtext>Alternate history</Navtext>
           <Navtext>Anthology</Navtext>
-          <Navtext>Children's</Navtext>
+          <Navtext>{"Children's"}</Navtext>
           <Navtext>Fairytale</Navtext>
           <Navtext>Fantasy</Navtext>
           <Navtext>Classic</Navtext>
@@ -30,7 +30,7 @@ export default function Page() {
           <Navtext>Horror</Navtext>
           <Navtext>Mystery</Navtext>
           <Navtext>Picture book</Navtext>
-          <Navtext>Coming-of-age</Navtext>
+          <Navtext>{"Coming-of-age"}</Navtext>
           <Navtext>Political thriller</Navtext>
           <Navtext>Romance</Navtext>
         </div>
@@ -47,11 +47,11 @@ export default function Page() {
         <div className="font-semibold text-xl p-4 ">Non Fiction</div>
 
         <div className="flex justify-items-center space-x-16 p-4">
-          <Navtext>Art/architecture</Navtext>
+          <Navtext>{"Art/architecture"}</Navtext>
           <Navtext>Autobiography</Navtext>
           <Navtext>Biography</Navtext>
-          <Navtext>Business/economics</Navtext>
-          <Navtext>Crafts/hobbies</Navtext>
+          <Navtext>{"Business/economics"}</Navtext>
+          <Navtext>{"Crafts/hobbies"}</Navtext>
           <Navtext>Cookbook</Navtext>
           <Navtext>Diary</Navtext>
           <Navtext>Dictionary</Navtext>
